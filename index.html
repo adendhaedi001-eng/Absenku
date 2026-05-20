@@ -1,0 +1,3628 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Absenku - Absensi dan Nilai Minimalis</title>
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Absenku" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  <style>
+    :root{
+      --primary:#2563eb;
+      --primary-soft:#eaf1ff;
+      --green:#16a34a;
+      --green-soft:#dcfce7;
+      --yellow:#f59e0b;
+      --yellow-soft:#fef3c7;
+      --red:#ef4444;
+      --red-soft:#fee2e2;
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --radius:18px;
+      --shadow:0 8px 22px rgba(15,23,42,.06);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    button,input,select,textarea{font:inherit}
+    button{border:0;cursor:pointer}
+    .hidden{display:none!important}
+
+    .wrap{
+      width:min(720px,100%);
+      margin:auto;
+      padding:14px;
+      padding-bottom:88px;
+    }
+
+    .login-page{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .login-card,.card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .login-card{
+      width:min(440px,100%);
+      padding:22px;
+    }
+
+    .logo{
+      width:54px;
+      height:54px;
+      border-radius:18px;
+      background:var(--primary);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-size:28px;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+
+    h1,h2,h3,p{margin-top:0}
+    h1{
+      font-size:27px;
+      line-height:1.15;
+      letter-spacing:-.8px;
+      margin-bottom:8px;
+    }
+    h2{
+      font-size:21px;
+      letter-spacing:-.4px;
+      margin-bottom:4px;
+    }
+    h3{font-size:17px;margin-bottom:8px}
+    .muted{
+      color:var(--muted);
+      line-height:1.55;
+      font-size:14px;
+    }
+
+    label{
+      display:block;
+      font-size:13px;
+      font-weight:800;
+      margin:14px 0 7px;
+    }
+
+    input,select,textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:13px 14px;
+      background:#fff;
+      outline:none;
+    }
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--primary);
+      box-shadow:0 0 0 4px rgba(37,99,235,.10);
+    }
+
+    .btn{
+      min-height:46px;
+      border-radius:14px;
+      padding:11px 15px;
+      font-weight:850;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      background:#eef2ff;
+      color:#1e40af;
+    }
+    .btn:active{transform:scale(.98)}
+    .btn.full{width:100%}
+    .btn.primary{background:var(--primary);color:#fff}
+    .btn.green{background:var(--green);color:#fff}
+    .btn.red{background:var(--red);color:#fff}
+    .btn.dark{background:#111827;color:#fff}
+    .btn.white{background:#fff;color:var(--text);border:1px solid var(--line)}
+    .btn.small{min-height:36px;padding:8px 10px;border-radius:11px;font-size:12px}
+
+    .top{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(246,248,251,.94);
+      backdrop-filter:blur(12px);
+      padding:10px 0;
+      border-bottom:1px solid rgba(229,231,235,.85);
+    }
+
+    .top-inner{
+      width:min(720px,100%);
+      margin:auto;
+      padding:0 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      font-weight:950;
+      letter-spacing:-.4px;
+    }
+
+    .brand-mark{
+      width:36px;
+      height:36px;
+      border-radius:13px;
+      background:var(--primary);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+    }
+
+    .user{
+      min-width:0;
+      text-align:right;
+    }
+    .user strong{
+      display:block;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:160px;
+      font-size:14px;
+    }
+    .user span{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .nav{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      background:#fff;
+      border-top:1px solid var(--line);
+      z-index:30;
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:4px;
+      padding:8px 8px max(8px,env(safe-area-inset-bottom));
+    }
+
+    .nav button{
+      background:transparent;
+      color:var(--muted);
+      border-radius:14px;
+      padding:8px 4px;
+      font-size:11px;
+      font-weight:850;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:2px;
+    }
+    .nav button.active{
+      background:var(--primary-soft);
+      color:var(--primary);
+    }
+    .nav .ico{font-size:18px;line-height:1}
+
+    .section{
+      margin:16px 0 10px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .card{
+      padding:15px;
+      margin-bottom:12px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+      margin:12px 0;
+    }
+
+    .stat{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+    }
+    .stat b{
+      display:block;
+      font-size:26px;
+      line-height:1;
+      margin-bottom:6px;
+      letter-spacing:-.5px;
+    }
+    .stat span{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .actions{
+      display:grid;
+      gap:9px;
+      grid-template-columns:1fr 1fr;
+    }
+    .actions.one{grid-template-columns:1fr}
+    .actions.three{grid-template-columns:1fr 1fr 1fr}
+
+    .filter{
+      display:grid;
+      gap:9px;
+      grid-template-columns:1fr;
+    }
+
+    .student-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .student-item{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:17px;
+      padding:13px;
+    }
+
+    .student-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .student-name{
+      font-weight:900;
+      line-height:1.25;
+    }
+    .student-nis{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      margin-top:3px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .Hadir{background:var(--green-soft);color:#166534}
+    .Izin{background:var(--primary-soft);color:#1e40af}
+    .Sakit{background:var(--yellow-soft);color:#92400e}
+    .Alpha{background:var(--red-soft);color:#991b1b}
+    .Belum{background:#f1f5f9;color:#475569}
+
+    .status-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:7px;
+    }
+    .status-grid button{
+      min-height:36px;
+      border-radius:11px;
+      background:#f3f4f6;
+      color:#4b5563;
+      font-size:12px;
+      font-weight:900;
+    }
+    .status-grid button.active[data-status="Hadir"]{background:var(--green);color:#fff}
+    .status-grid button.active[data-status="Izin"]{background:var(--primary);color:#fff}
+    .status-grid button.active[data-status="Sakit"]{background:var(--yellow);color:#fff}
+    .status-grid button.active[data-status="Alpha"]{background:var(--red);color:#fff}
+
+    .report-box{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+    }
+
+    .report-head{
+      padding:15px;
+      background:linear-gradient(180deg,#ffffff,#f8fafc);
+      border-bottom:1px solid var(--line);
+    }
+
+    .report-row{
+      display:grid;
+      grid-template-columns:80px 1fr 86px;
+      gap:8px;
+      padding:11px 13px;
+      border-bottom:1px solid var(--line);
+      align-items:center;
+      font-size:13px;
+    }
+    .report-row:last-child{border-bottom:0}
+    .report-row.head{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--muted);
+      font-weight:900;
+      background:#f9fafb;
+    }
+    .report-row .name{
+      font-weight:850;
+      line-height:1.25;
+    }
+
+    .student-hero{
+      background:var(--primary);
+      color:#fff;
+      border-radius:22px;
+      padding:18px;
+      margin-bottom:12px;
+    }
+    .student-hero .muted{color:rgba(255,255,255,.82)}
+    .student-hero .actions{margin-top:14px}
+    .student-hero .btn{font-size:15px}
+
+    textarea{
+      min-height:170px;
+      resize:vertical;
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .share-preview{
+      white-space:pre;
+      background:#f9fafb;
+      border:1px dashed #cbd5e1;
+      border-radius:14px;
+      padding:12px;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      font-size:11px;
+      line-height:1.45;
+      font-variant-numeric:tabular-nums;
+      max-height:330px;
+      overflow:auto;
+    }
+
+    .empty{
+      text-align:center;
+      color:var(--muted);
+      padding:24px 10px;
+    }
+
+
+
+.grade-box{
+  background:linear-gradient(180deg,#ffffff,#f8fbff);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:14px;
+  margin-bottom:12px;
+}
+
+.grade-row{
+  display:grid;
+  grid-template-columns:74px 1fr 86px;
+  gap:8px;
+  padding:11px 13px;
+  border-bottom:1px solid var(--line);
+  align-items:center;
+  font-size:13px;
+}
+.grade-row:last-child{border-bottom:0}
+.grade-row.head{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--muted);
+  font-weight:900;
+  background:#f9fafb;
+}
+.grade-name{
+  font-weight:850;
+  line-height:1.25;
+}
+.grade-input{
+  max-width:86px;
+  text-align:center;
+  font-weight:900;
+}
+.grade-note{
+  min-height:38px;
+  font-size:12px;
+  margin-top:7px;
+}
+.grade-tools{
+  display:grid;
+  gap:9px;
+  grid-template-columns:1fr;
+}
+
+.grade-compact-card{
+  padding:11px 12px;
+}
+.grade-input-compact{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 88px;
+  gap:10px;
+  align-items:center;
+}
+.grade-card-title{
+  min-width:0;
+}
+.grade-mini-label{
+  margin:0 0 5px;
+  font-size:11px;
+  text-align:center;
+}
+.grade-input-compact .grade-input{
+  width:100%;
+  max-width:88px;
+  padding:10px 8px;
+}
+.grade-report-row{
+  display:grid;
+  grid-template-columns:78px minmax(0,1fr);
+  gap:8px;
+  padding:9px 12px;
+  border-bottom:1px solid var(--line);
+  align-items:center;
+  font-size:13px;
+}
+.grade-report-row:last-child{border-bottom:0}
+.grade-report-row.head{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--muted);
+  font-weight:900;
+  background:#f9fafb;
+}
+.grade-name-score{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  min-width:0;
+}
+.grade-name-score .grade-name{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.grade-score-pill{
+  min-width:44px;
+  text-align:center;
+  padding:6px 9px;
+  border-radius:999px;
+  background:var(--primary-soft);
+  color:#1e40af;
+  font-weight:950;
+  flex:0 0 auto;
+}
+.pred-A{background:var(--green-soft);color:#166534}
+.pred-B{background:var(--primary-soft);color:#1e40af}
+.pred-C{background:var(--yellow-soft);color:#92400e}
+.pred-D,.pred-E{background:var(--red-soft);color:#991b1b}
+.pred-Belum{background:#f1f5f9;color:#475569}
+
+
+.attendance-compact-card{
+  padding:10px 12px;
+}
+.attendance-line,
+.attendance-report-name{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-width:0;
+}
+.attendance-line .name,
+.attendance-report-name .name{
+  font-weight:900;
+  line-height:1.25;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.attendance-compact-card .student-nis{
+  font-size:11.5px;
+  margin-top:4px;
+}
+.compact-status-grid{
+  margin-top:8px;
+  gap:6px;
+}
+.compact-status-grid button{
+  min-height:32px;
+  padding:6px 4px;
+  font-size:11px;
+}
+.attendance-report-row{
+  display:grid;
+  grid-template-columns:70px minmax(0,1fr) 44px;
+  gap:6px;
+  padding:7px 10px;
+  border-bottom:1px solid var(--line);
+  align-items:center;
+  font-size:12px;
+}
+.attendance-report-short-name{
+  font-weight:900;
+  line-height:1.2;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.attendance-report-row:last-child{border-bottom:0}
+.attendance-report-row.head{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--muted);
+  font-weight:900;
+  background:#f9fafb;
+}
+.attendance-report-row .pill{
+  padding:4px 7px;
+  font-size:10.5px;
+}
+
+.attendance-check-head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 168px;
+  gap:8px;
+  padding:8px 12px;
+  margin-bottom:8px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#f9fafb;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.attendance-check-card{
+  padding:9px 10px;
+}
+.attendance-check-main{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 168px;
+  gap:8px;
+  align-items:center;
+}
+.attendance-check-name{
+  min-width:0;
+}
+.attendance-check-name .name{
+  display:block;
+  font-weight:900;
+  line-height:1.2;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.attendance-check-name .student-nis{
+  margin-top:2px;
+  font-size:11px;
+}
+.attendance-check-options{
+  display:flex;
+  justify-content:flex-end;
+  gap:5px;
+}
+.attendance-circle-btn{
+  width:36px;
+  height:36px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid var(--line);
+  color:#64748b;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:0;
+  padding:0;
+  font-weight:950;
+}
+.attendance-circle-btn .circle{
+  width:16px;
+  height:16px;
+  border-radius:999px;
+  border:2px solid currentColor;
+  display:grid;
+  place-items:center;
+  font-size:10px;
+  line-height:1;
+  margin-bottom:1px;
+}
+.attendance-circle-btn .short{
+  font-size:10px;
+  line-height:1;
+}
+.attendance-circle-btn.active[data-status="Hadir"]{background:var(--green);border-color:var(--green);color:#fff}
+.attendance-circle-btn.active[data-status="Izin"]{background:var(--primary);border-color:var(--primary);color:#fff}
+.attendance-circle-btn.active[data-status="Sakit"]{background:var(--yellow);border-color:var(--yellow);color:#fff}
+.attendance-circle-btn.active[data-status="Alpha"]{background:var(--red);border-color:var(--red);color:#fff}
+.attendance-circle-btn.active .circle{
+  background:rgba(255,255,255,.25);
+  border-color:#fff;
+}
+.attendance-current-status{
+  display:none;
+}
+
+
+.quran-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:10px 0 12px;
+}
+.quran-summary-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:11px 10px;
+  text-align:center;
+}
+.quran-summary-card b{
+  display:block;
+  font-size:22px;
+  line-height:1;
+  margin-bottom:5px;
+}
+.quran-summary-card span{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:900;
+}
+.quran-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:7px;
+  margin-top:10px;
+}
+.quran-actions .btn{
+  min-height:34px;
+  padding:7px 8px;
+  border-radius:11px;
+  font-size:11.5px;
+}
+.quran-card-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:9px;
+}
+.quran-pill-bisa{background:var(--green-soft);color:#166534}
+.quran-pill-belum{background:var(--red-soft);color:#991b1b}
+.quran-pill-prestasi{background:var(--yellow-soft);color:#92400e}
+.quran-pill-netral{background:#f1f5f9;color:#475569}
+.quran-mini-text{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.45;
+  margin-top:8px;
+}
+.student-switch-card{
+  border:1px solid #dbeafe;
+  background:linear-gradient(180deg,#ffffff,#f8fbff);
+}
+.student-switch-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  align-items:end;
+}
+.student-switch-row label{
+  margin-top:0;
+}
+.student-switch-row .btn{
+  min-width:92px;
+}
+@media(max-width:390px){
+  .student-switch-row{grid-template-columns:1fr}
+  .student-switch-row .btn{width:100%}
+}
+
+
+.fee-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin:10px 0 12px;
+}
+.fee-summary-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:11px 8px;
+  text-align:center;
+}
+.fee-summary-card b{display:block;font-size:20px;line-height:1;margin-bottom:5px}
+.fee-summary-card span{display:block;font-size:10.5px;color:var(--muted);font-weight:850}
+.fee-admin-row{display:grid;grid-template-columns:minmax(0,1fr) 96px 88px;gap:8px;align-items:center}
+.fee-admin-row.head{color:var(--muted);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;padding:7px 4px}
+.fee-amount-input{min-height:36px;padding:8px 9px;border-radius:11px;font-size:12px;text-align:right}
+.fee-status-mini{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.fee-status-btn{min-height:32px;border-radius:999px;padding:6px 8px;font-size:11px;font-weight:900;background:#f3f4f6;color:#4b5563;border:1px solid var(--line)}
+.fee-status-btn.active.lunas{background:var(--green);border-color:var(--green);color:#fff}
+.fee-status-btn.active.belum{background:var(--red);border-color:var(--red);color:#fff}
+.fee-pill-lunas{background:var(--green-soft);color:#166534}
+.fee-pill-belum{background:var(--red-soft);color:#991b1b}
+.fee-card-note{font-size:12px;color:var(--muted);line-height:1.45;margin-top:9px}
+
+    .desktop-only{display:none}
+
+    @media(min-width:680px){
+      .wrap{padding:18px 14px 96px}
+      .stats{grid-template-columns:repeat(4,1fr)}
+      .filter{grid-template-columns:160px 1fr 160px}
+      .student-list{grid-template-columns:1fr 1fr}
+      .report-row{grid-template-columns:100px 1fr 100px}
+      .desktop-only{display:inline-flex}
+    }
+
+    @media(max-width:390px){
+      .wrap{padding:10px;padding-bottom:86px}
+      .card{padding:12px}
+      .actions,.actions.three{grid-template-columns:1fr}
+      .status-grid{grid-template-columns:1fr 1fr}
+      .nav button{font-size:10px}
+      .user strong{max-width:120px}
+      .report-row{grid-template-columns:68px 1fr 78px;font-size:12px}
+      .attendance-check-head{grid-template-columns:minmax(0,1fr) 132px;padding:7px 9px}
+      .attendance-check-main{grid-template-columns:minmax(0,1fr) 132px;gap:6px}
+      .attendance-report-row{grid-template-columns:68px minmax(0,1fr) 54px;gap:6px;padding:7px 10px;font-size:12.5px}
+      .attendance-check-options{gap:3px}
+      .attendance-circle-btn{width:30px;height:30px}
+      .attendance-circle-btn .circle{width:13px;height:13px;font-size:8px;border-width:1.5px}
+      .attendance-circle-btn .short{font-size:9px}
+      .quran-summary-grid{grid-template-columns:1fr 1fr 1fr;gap:6px}
+      .quran-summary-card{padding:9px 6px}
+      .quran-summary-card b{font-size:19px}
+      .quran-summary-card span{font-size:10px}
+      .quran-actions{grid-template-columns:1fr;gap:6px}
+      .fee-summary-grid{grid-template-columns:1fr 1fr;gap:6px}
+      .fee-admin-row{grid-template-columns:minmax(0,1fr) 82px 78px;gap:5px}
+      .fee-amount-input{font-size:11px;padding:7px 6px}
+      .fee-status-btn{font-size:10px;padding:5px 6px}
+    }
+
+    @media print{
+      .top,.nav,.no-print{display:none!important}
+      body{background:#fff}
+      .wrap{width:100%;padding:0}
+      .card,.report-box{box-shadow:none;border:0}
+    }
+  </style>
+</head>
+<body>
+  <section id="loginView" class="login-page">
+    <div class="login-card">
+      <div class="logo">✓</div>
+      <h1>Absenku</h1>
+      <p class="muted">Absensi sekolah yang minimalis, ringan, dan nyaman dipakai di HP.</p>
+
+      <label>Nama pengguna</label>
+      <input id="loginName" placeholder="Contoh: Pak Guru / Alwi" />
+
+      <label>Masuk sebagai</label>
+      <select id="loginRole" onchange="updateLoginStudentBox()">
+        <option value="guru">Guru</option>
+        <option value="siswa">Siswa</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <label>Kelas</label>
+      <select id="loginClass"></select>
+
+      <div id="studentLoginBox" class="hidden">
+        <label>Pilih NIS - Nama siswa</label>
+        <select id="loginStudent" onchange="syncLoginStudentName()"></select>
+        <p class="muted" style="margin-top:8px">Untuk login siswa, pilih NIS lalu nama dari daftar agar fitur Data Saya, Prestasi, dan Baca Al-Qur'an muncul.</p>
+      </div>
+
+      <button class="btn primary full" style="margin-top:18px" onclick="login()">Masuk</button>
+      <p class="muted" style="margin-top:14px">Data bisa tersimpan online lewat Cloudflare. Untuk siswa, pilih NIS lalu nama dari daftar siswa.</p>
+    </div>
+  </section>
+
+  <section id="appView" class="hidden">
+    <header class="top">
+      <div class="top-inner">
+        <div class="brand">
+          <div class="brand-mark">✓</div>
+          <span>Absenku</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px">
+          <div class="user">
+            <strong id="userName">Pengguna</strong>
+            <span id="userRole">Guru</span>
+          </div>
+          <button class="btn small white no-print" onclick="logout()">Keluar</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap" id="mainContent"></main>
+    <nav id="nav" class="nav no-print"></nav>
+  </section>
+
+<script>
+const STORAGE_KEY = "ABSENKU_MINIMAL_HP_V5_FRESH_RESET_READY";
+
+// === CLOUDFlARE ONLINE SYNC ===
+// Setelah Worker Cloudflare dibuat, ganti isi di bawah dengan URL Worker Anda.
+// Contoh: https://absenku-api.namaanda.workers.dev
+const DEFAULT_CLOUDFLARE_WORKER_URL = "";
+const CLOUD_API_KEY = "ABSENKU_CLOUDFLARE_API_URL_FRESH_RESET";
+
+// === PENYIMPANAN PRIBADI OTOMATIS ===
+// Data utama tetap disimpan di STORAGE_KEY. Cadangan pribadi memakai 1 backup utama
+// yang selalu ditimpa otomatis. Di dalamnya ada rekapan/snapshot maksimal 30 hari terakhir.
+const PRIVATE_STORAGE_KEY = "ABSENKU_PRIVATE_STORAGE_BACKUP_V2_FRESH_RESET";
+// Key lama ini hanya dipakai untuk migrasi/pembersihan dari versi sebelumnya.
+const PRIVATE_STORAGE_HISTORY_KEY = "ABSENKU_PRIVATE_STORAGE_HISTORY_V2_FRESH_RESET";
+const PRIVATE_STORAGE_MAX_DAYS = 30;
+const DEFAULT_IURAN_AMOUNT = 0;
+
+let cloudStatus = "offline";
+let cloudSaveTimer = null;
+let cloudSyncInProgress = false;
+
+function getCloudApiUrl(){
+  const saved = localStorage.getItem(CLOUD_API_KEY) || DEFAULT_CLOUDFLARE_WORKER_URL || "";
+  return saved.trim().replace(/\/+$/, "");
+}
+
+function cloudReady(){
+  const url = getCloudApiUrl();
+  return /^https:\/\//i.test(url) && !url.includes("GANTI");
+}
+
+function cloudStatusText(){
+  if(!cloudReady()) return "Offline - masukkan URL Worker Cloudflare dulu.";
+  if(cloudStatus === "online") return "Online - data tersambung ke Cloudflare.";
+  if(cloudStatus === "syncing") return "Menyinkronkan data Cloudflare...";
+  if(cloudStatus === "saving") return "Menyimpan data ke Cloudflare...";
+  if(cloudStatus === "error") return "Gagal konek - cek URL Worker dan binding KV.";
+  return "Siap konek ke Cloudflare.";
+}
+
+function updateCloudStatusUI(){
+  const el = document.getElementById("cloudStatusText");
+  if(el) el.textContent = cloudStatusText();
+}
+
+const defaultStudents = [
+  {
+    "id": "260501",
+    "nis": "260501",
+    "name": "Al-Fatih Hilal Nirjaman",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260502",
+    "nis": "260502",
+    "name": "Alwi Aldiansyah Alfariq",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260503",
+    "nis": "260503",
+    "name": "Alya",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260504",
+    "nis": "260504",
+    "name": "Apipah",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260505",
+    "nis": "260505",
+    "name": "Dafa",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260506",
+    "nis": "260506",
+    "name": "Dhea Nur Fauziah Shaqi",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260507",
+    "nis": "260507",
+    "name": "Elgi Ferdiansyah",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260508",
+    "nis": "260508",
+    "name": "Gisan Ardian",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260509",
+    "nis": "260509",
+    "name": "Hilal Muzaki.R",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260510",
+    "nis": "260510",
+    "name": "Iqbal Hambali",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260511",
+    "nis": "260511",
+    "name": "M.Candra Saputra",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260512",
+    "nis": "260512",
+    "name": "Milka",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260513",
+    "nis": "260513",
+    "name": "Nuri Rizkia",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260514",
+    "nis": "260514",
+    "name": "Puput",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260515",
+    "nis": "260515",
+    "name": "Ripa",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260516",
+    "nis": "260516",
+    "name": "Rosalinda",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260517",
+    "nis": "260517",
+    "name": "Ujang Farhan",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260518",
+    "nis": "260518",
+    "name": "Wildan",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260519",
+    "nis": "260519",
+    "name": "Yusup Nurhidayat",
+    "className": "Kelas 1"
+  },
+  {
+    "id": "260520",
+    "nis": "260520",
+    "name": "Agnia Fitri Ramadani",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260521",
+    "nis": "260521",
+    "name": "Dinda Ockthanti Shaqi",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260522",
+    "nis": "260522",
+    "name": "Desita Ramia Bunga",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260523",
+    "nis": "260523",
+    "name": "Maulidiya Nabilah",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260524",
+    "nis": "260524",
+    "name": "Muhammad Aprizza",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260525",
+    "nis": "260525",
+    "name": "Muhammad Zaidan",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260526",
+    "nis": "260526",
+    "name": "Nahda Rafanda Alifa",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260527",
+    "nis": "260527",
+    "name": "Nahya Sri N L",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260528",
+    "nis": "260528",
+    "name": "Alifiya N S",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260529",
+    "nis": "260529",
+    "name": "Rahmi Sri Lestari",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260530",
+    "nis": "260530",
+    "name": "Raihan Maulana",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260531",
+    "nis": "260531",
+    "name": "Regi Saputra",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260532",
+    "nis": "260532",
+    "name": "Revi Meylani Hasanah",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260533",
+    "nis": "260533",
+    "name": "Sani Saputra",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260534",
+    "nis": "260534",
+    "name": "Tiara Indah Putri",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260535",
+    "nis": "260535",
+    "name": "Zahda Al Ghazali",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260536",
+    "nis": "260536",
+    "name": "Rizky Maulana",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260537",
+    "nis": "260537",
+    "name": "Khanza Aqila Khoirunisa",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260538",
+    "nis": "260538",
+    "name": "Alika Aulia Putri",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260539",
+    "nis": "260539",
+    "name": "Ayska Aqila Qirani",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260540",
+    "nis": "260540",
+    "name": "Alysa Putri Nabila",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260541",
+    "nis": "260541",
+    "name": "Keyzha Ramadhania Putri",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260542",
+    "nis": "260542",
+    "name": "Nur Muhammad Ghozali",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260543",
+    "nis": "260543",
+    "name": "Kintan Aulia",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260544",
+    "nis": "260544",
+    "name": "Nabila Asyifa Naura",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260545",
+    "nis": "260545",
+    "name": "Reyhan Cahya Ryansyah",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260546",
+    "nis": "260546",
+    "name": "Silviana Dyra",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260547",
+    "nis": "260547",
+    "name": "Juwita Rahmawati",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260548",
+    "nis": "260548",
+    "name": "Alika Luthvi Vauziah",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260549",
+    "nis": "260549",
+    "name": "Fitri Nurhalimah",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260550",
+    "nis": "260550",
+    "name": "Raisa Putri Nadia Sari",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260551",
+    "nis": "260551",
+    "name": "Ridwan Maulana",
+    "className": "Kelas 2"
+  },
+  {
+    "id": "260552",
+    "nis": "260552",
+    "name": "Makil Azam Nugraha",
+    "className": "Kelas 2"
+  }
+];
+
+const defaultAttendance = {};
+
+
+const defaultSubjects = [
+  "Fiqh",
+  "Tauhid",
+  "Tilawah"
+];
+
+function safeParseJSON(text, fallback=null){
+  try{return JSON.parse(text);}catch(e){return fallback;}
+}
+
+function clonePlain(obj){
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function backupDayKey(dateObj=new Date()){
+  const y = dateObj.getFullYear();
+  const m = String(dateObj.getMonth() + 1).padStart(2,"0");
+  const d = String(dateObj.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
+}
+
+function makeDailyBackupEntry(reason="manual"){
+  const savedAt = new Date().toISOString();
+  return {
+    date:backupDayKey(),
+    savedAt,
+    reason,
+    totalStudents:state.students?.length || 0,
+    totalSubjects:state.gradeSubjects?.length || 0,
+    totalAttendanceDays:Object.keys(state.attendance || {}).length,
+    totalGradeSubjects:Object.keys(state.grades || {}).length,
+    totalFeeMonths:Object.keys(state.fees || {}).length,
+    state:clonePlain(state)
+  };
+}
+
+function normalizeDailyBackupEntry(entry){
+  if(!entry || typeof entry !== "object") return null;
+  const backupState = backupStateFromPayload(entry);
+  if(!backupState) return null;
+  const savedAt = entry.savedAt || new Date().toISOString();
+  const date = entry.date || String(savedAt).slice(0,10) || backupDayKey();
+  return {
+    date,
+    savedAt,
+    reason:entry.reason || "cadangan",
+    totalStudents:entry.totalStudents || backupState.students?.length || 0,
+    totalSubjects:entry.totalSubjects || backupState.gradeSubjects?.length || 0,
+    totalAttendanceDays:entry.totalAttendanceDays || Object.keys(backupState.attendance || {}).length,
+    totalGradeSubjects:entry.totalGradeSubjects || Object.keys(backupState.grades || {}).length,
+    totalFeeMonths:entry.totalFeeMonths || Object.keys(backupState.fees || {}).length,
+    state:backupState
+  };
+}
+
+function trimDailyBackups(rows){
+  const map = new Map();
+  (Array.isArray(rows) ? rows : []).forEach(row => {
+    const entry = normalizeDailyBackupEntry(row);
+    if(!entry) return;
+    const prev = map.get(entry.date);
+    if(!prev || String(entry.savedAt) > String(prev.savedAt)) map.set(entry.date, entry);
+  });
+  return [...map.values()]
+    .sort((a,b) => String(b.date).localeCompare(String(a.date)) || String(b.savedAt).localeCompare(String(a.savedAt)))
+    .slice(0, PRIVATE_STORAGE_MAX_DAYS);
+}
+
+function makePrivateBackupPayload(reason="manual"){
+  const existing = getPrivateStorageBackup();
+  const oldHistory = safeParseJSON(localStorage.getItem(PRIVATE_STORAGE_HISTORY_KEY), []);
+  let dailyBackups = [];
+  if(existing && Array.isArray(existing.dailyBackups)) dailyBackups = existing.dailyBackups;
+  else if(existing && existing.state) dailyBackups = [existing];
+  if(Array.isArray(oldHistory) && oldHistory.length) dailyBackups = dailyBackups.concat(oldHistory);
+
+  const todayEntry = makeDailyBackupEntry(reason);
+  dailyBackups = trimDailyBackups([
+    todayEntry,
+    ...dailyBackups.filter(b => (b?.date || String(b?.savedAt || "").slice(0,10)) !== todayEntry.date)
+  ]);
+
+  return {
+    app:"Absenku",
+    version:6,
+    backupMode:"single-rolling-30-days",
+    reason,
+    savedAt:todayEntry.savedAt,
+    maxDays:PRIVATE_STORAGE_MAX_DAYS,
+    state:clonePlain(state),
+    dailyBackups
+  };
+}
+
+function getPrivateStorageBackup(){
+  return safeParseJSON(localStorage.getItem(PRIVATE_STORAGE_KEY), null);
+}
+
+function getPrivateStorageHistory(){
+  const backup = getPrivateStorageBackup();
+  if(backup && Array.isArray(backup.dailyBackups)) return trimDailyBackups(backup.dailyBackups);
+  const oldRows = safeParseJSON(localStorage.getItem(PRIVATE_STORAGE_HISTORY_KEY), []);
+  if(Array.isArray(oldRows) && oldRows.length) return trimDailyBackups(oldRows);
+  if(backup && backup.state) return trimDailyBackups([backup]);
+  return [];
+}
+
+function backupStorageSizeText(){
+  const main = localStorage.getItem(STORAGE_KEY) || "";
+  const backup = localStorage.getItem(PRIVATE_STORAGE_KEY) || "";
+  const bytes = new Blob([main, backup]).size;
+  if(bytes > 1024 * 1024) return (bytes / 1024 / 1024).toFixed(2) + " MB";
+  return Math.max(1, Math.round(bytes / 1024)) + " KB";
+}
+
+function formatBackupDate(iso){
+  if(!iso) return "Belum ada";
+  try{
+    return new Date(iso).toLocaleString("id-ID", {
+      weekday:"short", day:"2-digit", month:"short", year:"numeric",
+      hour:"2-digit", minute:"2-digit"
+    });
+  }catch(e){return iso;}
+}
+
+function savePrivateStorageBackup(reason="manual", showAlert=true){
+  try{
+    const payload = makePrivateBackupPayload(reason);
+    localStorage.setItem(PRIVATE_STORAGE_KEY, JSON.stringify(payload));
+    // Hapus daftar backup lama agar tidak menumpuk. Sekarang semua snapshot 30 hari ada di 1 backup utama.
+    localStorage.removeItem(PRIVATE_STORAGE_HISTORY_KEY);
+
+    if(showAlert) alert("Data berhasil disimpan ke 1 backup utama storage pribadi. Backup ini berisi rekapan maksimal 30 hari terakhir.");
+    return true;
+  }catch(err){
+    if(showAlert) alert("Gagal menyimpan ke storage pribadi. Kemungkinan penyimpanan browser penuh atau mode incognito. Detail: " + err.message);
+    return false;
+  }
+}
+
+function autoSavePrivateStorage(){
+  savePrivateStorageBackup("otomatis", false);
+}
+
+function manualSavePrivateStorage(){
+  savePrivateStorageBackup("manual", true);
+  renderBackup();
+}
+
+function backupStateFromPayload(payload){
+  if(payload && payload.state && Array.isArray(payload.state.students)) return payload.state;
+  if(payload && Array.isArray(payload.students)) return payload;
+  return null;
+}
+
+function restorePrivateStorageBackup(index=null){
+  const payload = index === null ? getPrivateStorageBackup() : getPrivateStorageHistory()[index];
+  const backupState = backupStateFromPayload(payload);
+  if(!backupState) return alert("Cadangan pribadi belum tersedia atau formatnya tidak cocok.");
+  const label = payload?.date ? `tanggal ${payload.date}` : (payload?.savedAt ? formatBackupDate(payload.savedAt) : "cadangan ini");
+  if(!confirm("Pulihkan data dari " + label + "? Data yang sedang aktif akan diganti.")) return;
+
+  state = normalizeState(backupState);
+  saveState();
+  fillClasses();
+  alert("Data berhasil dipulihkan dari storage pribadi.");
+  render();
+}
+
+function clearPrivateStorageBackup(){
+  if(!confirm("Hapus 1 backup utama storage pribadi browser ini? Data aktif tetap ada, hanya cadangannya yang dihapus.")) return;
+  localStorage.removeItem(PRIVATE_STORAGE_KEY);
+  localStorage.removeItem(PRIVATE_STORAGE_HISTORY_KEY);
+  alert("Cadangan storage pribadi sudah dihapus.");
+  renderBackup();
+}
+
+function downloadManualBackup(){
+  savePrivateStorageBackup("download", false);
+  const payload = getPrivateStorageBackup() || makePrivateBackupPayload("download-json");
+  downloadFile(`backup-absenku-30hari-${today()}.json`, JSON.stringify(payload,null,2), "application/json;charset=utf-8");
+}
+
+function importBackupFromText(){
+  try{
+    const raw = document.getElementById("importBox")?.value || "";
+    const data = JSON.parse(raw);
+    importBackupDataObject(data);
+  }catch(e){
+    alert("Import gagal. Pastikan data JSON benar.");
+  }
+}
+
+function importBackupDataObject(data){
+  const backupState = backupStateFromPayload(data);
+  if(!backupState) throw new Error("Format backup tidak cocok");
+  state = normalizeState(backupState);
+  saveState();
+  savePrivateStorageBackup("import", false);
+  fillClasses();
+  alert("Import berhasil dan data juga masuk ke 1 backup utama storage pribadi.");
+  render();
+}
+
+function importBackupFromFile(event){
+  const file = event.target.files && event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const data = JSON.parse(reader.result);
+      importBackupDataObject(data);
+    }catch(err){
+      alert("Import file gagal. Pastikan file adalah backup JSON Absenku.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function privateBackupInfoHtml(){
+  const latest = getPrivateStorageBackup();
+  const history = getPrivateStorageHistory();
+  const latestText = latest?.savedAt ? formatBackupDate(latest.savedAt) : "Belum ada cadangan pribadi";
+  const latestReason = latest?.reason ? ` • ${esc(latest.reason)}` : "";
+  const rows = history.slice(0, PRIVATE_STORAGE_MAX_DAYS).map((b,idx) => `
+    <div class="student-item" style="padding:10px 12px">
+      <div class="student-head" style="margin-bottom:0">
+        <div>
+          <div class="student-name">${esc(b.date || String(b.savedAt || "").slice(0,10))}</div>
+          <div class="student-nis">${esc(formatBackupDate(b.savedAt))} • ${esc(b.reason || "cadangan")} • ${b.totalStudents || 0} siswa • ${b.totalSubjects || 0} mapel</div>
+        </div>
+        <button class="btn small white" onclick="restorePrivateStorageBackup(${idx})">Pulihkan</button>
+      </div>
+    </div>
+  `).join("");
+
+  return `
+    <p class="muted"><b>Mode backup:</b> 1 backup utama ditimpa otomatis, berisi rekapan/snapshot maksimal ${PRIVATE_STORAGE_MAX_DAYS} hari.<br><b>Cadangan terakhir:</b> ${esc(latestText)}${latestReason}<br><b>Hari tersimpan:</b> ${history.length}/${PRIVATE_STORAGE_MAX_DAYS}<br><b>Ukuran data lokal:</b> ${esc(backupStorageSizeText())}</p>
+    ${rows ? `<div class="student-list" style="margin-top:10px">${rows}</div>` : `<div class="empty" style="padding:14px 10px">Belum ada rekapan harian di backup utama.</div>`}
+  `;
+}
+
+let state = loadState();
+let currentUser = null;
+let activePage = "dashboard";
+
+
+function normalizeStudent(student){
+  const s = (student && typeof student === "object") ? student : {};
+  const nis = String(s.nis || s.id || "").trim() || ("s-" + Date.now());
+  const quranStatus = String(s.quranStatus || s.alquranStatus || "belum").toLowerCase() === "bisa" ? "bisa" : "belum";
+  return {
+    ...s,
+    id:String(s.id || nis),
+    nis,
+    name:String(s.name || "Tanpa Nama").trim(),
+    className:String(s.className || s.kelas || "Kelas 1").trim(),
+    quranStatus,
+    prestasi:Boolean(s.prestasi || s.isPrestasi || false)
+  };
+}
+
+function quranLabel(status){
+  return status === "bisa" ? "Sudah Bisa Baca Al-Qur'an" : "Belum Bisa Baca Al-Qur'an";
+}
+
+function quranShortLabel(status){
+  return status === "bisa" ? "Bisa Baca" : "Belum Bisa";
+}
+
+function quranPillClass(status){
+  return status === "bisa" ? "quran-pill-bisa" : "quran-pill-belum";
+}
+
+function quranSummary(){
+  const total = state?.students?.length || 0;
+  const bisa = (state?.students || []).filter(s => s.quranStatus === "bisa").length;
+  const belum = total - bisa;
+  const prestasi = (state?.students || []).filter(s => s.prestasi).length;
+  return {total,bisa,belum,prestasi};
+}
+
+function quranSummaryHtml(){
+  const q = quranSummary();
+  return `
+    <div class="quran-summary-grid">
+      <div class="quran-summary-card"><b>${q.prestasi}</b><span>Berprestasi</span></div>
+      <div class="quran-summary-card"><b>${q.bisa}</b><span>Bisa Baca</span></div>
+      <div class="quran-summary-card"><b>${q.belum}</b><span>Belum Bisa</span></div>
+    </div>
+  `;
+}
+
+function quranStudentBadges(student){
+  if(!student) return "";
+  return `
+    <div class="quran-card-row">
+      ${student.prestasi ? `<span class="pill quran-pill-prestasi">⭐ Berprestasi</span>` : `<span class="pill quran-pill-netral">☆ Belum ditandai prestasi</span>`}
+      <span class="pill ${quranPillClass(student.quranStatus)}">${student.quranStatus === "bisa" ? "✅" : "⏳"} ${quranShortLabel(student.quranStatus)}</span>
+    </div>
+  `;
+}
+
+function setQuranStatus(id,status){
+  const s = state.students.find(x => String(x.id) === String(id));
+  if(!s) return alert("Siswa tidak ditemukan.");
+  s.quranStatus = status === "bisa" ? "bisa" : "belum";
+  saveState();
+  renderStudents();
+}
+
+function togglePrestasi(id){
+  const s = state.students.find(x => String(x.id) === String(id));
+  if(!s) return alert("Siswa tidak ditemukan.");
+  s.prestasi = !s.prestasi;
+  saveState();
+  renderStudents();
+}
+
+function rekapQuranText(){
+  const q = quranSummary();
+  const bisa = state.students.filter(s => s.quranStatus === "bisa").map(s => `- ${s.name}`).join("\n") || "-";
+  const belum = state.students.filter(s => s.quranStatus !== "bisa").map(s => `- ${s.name}`).join("\n") || "-";
+  const prestasi = state.students.filter(s => s.prestasi).map(s => `- ${s.name}`).join("\n") || "-";
+  return `REKAP PRESTASI & BACA AL-QUR'AN\n${state.schoolName}\n${prettyDate(today())}\n\nBerprestasi : ${q.prestasi}\nSudah Bisa  : ${q.bisa}\nBelum Bisa  : ${q.belum}\n\nSISWA BERPRESTASI\n${prestasi}\n\nSUDAH BISA BACA AL-QUR'AN\n${bisa}\n\nBELUM BISA BACA AL-QUR'AN\n${belum}`;
+}
+
+function copyQuranText(){
+  navigator.clipboard.writeText(rekapQuranText());
+  alert("Rekap prestasi dan baca Al-Qur'an berhasil disalin.");
+}
+
+function shareQuranWhatsApp(){
+  window.open(`https://wa.me/?text=${encodeURIComponent(rekapQuranText())}`,"_blank");
+}
+
+
+function adminPrestasiRows(){
+  return state.students
+    .slice()
+    .sort(sortByName)
+    .filter(s => s.prestasi)
+    .map(s => ({
+      nis:s.nis,
+      name:s.name,
+      className:s.className,
+      quranStatus:s.quranStatus || "belum"
+    }));
+}
+
+function adminPrestasiDashboardCard(){
+  const rows = adminPrestasiRows();
+  const q = quranSummary();
+  const preview = rows.slice(0,4).map(s => `
+    <div class="student-item" style="padding:10px 12px">
+      <div class="compact-student-row">
+        <div>
+          <div class="student-name">⭐ ${esc(s.name)}</div>
+          <div class="student-nis">NIS ${esc(s.nis)} • ${esc(s.className)}</div>
+        </div>
+        <span class="pill ${quranPillClass(s.quranStatus)}">${s.quranStatus === "bisa" ? "✅" : "⏳"} ${quranShortLabel(s.quranStatus)}</span>
+      </div>
+    </div>
+  `).join("");
+
+  return `
+    <div class="card">
+      <h3>⭐ Siswa Berprestasi</h3>
+      <p class="muted">Ada <b>${q.prestasi}</b> siswa berprestasi. Admin bisa melihat daftar lengkapnya di menu Prestasi.</p>
+      ${preview ? `<div class="student-list">${preview}</div>` : `<div class="empty">Belum ada siswa yang ditandai berprestasi.</div>`}
+      <button class="btn primary full no-print" style="margin-top:12px" onclick="activePage='prestasi';render()">Lihat Daftar Prestasi</button>
+    </div>
+  `;
+}
+
+function adminPrestasiText(){
+  const rows = adminPrestasiRows();
+  const q = quranSummary();
+  const body = rows.length
+    ? rows.map((s,i) => `${String(i+1).padStart(2,"0")}. ${shortNameForShare(s.name, 14)} | ${s.quranStatus === "bisa" ? "Bisa Baca" : "Belum Bisa"}`).join("\n")
+    : "Belum ada siswa yang ditandai berprestasi.";
+  return `REKAP SISWA BERPRESTASI\n${state.schoolName}\n${prettyDate(today())}\n\nTotal Siswa       : ${q.total}\nBerprestasi       : ${q.prestasi}\nSudah Bisa Baca   : ${q.bisa}\nBelum Bisa Baca   : ${q.belum}\n\nDAFTAR BERPRESTASI\n${body}`;
+}
+
+function copyAdminPrestasiText(){
+  navigator.clipboard.writeText(adminPrestasiText());
+  alert("Rekap siswa berprestasi berhasil disalin.");
+}
+
+function shareAdminPrestasiWhatsApp(){
+  window.open(`https://wa.me/?text=${encodeURIComponent(adminPrestasiText())}`,"_blank");
+}
+
+function renderAdminPrestasi(){
+  if(currentUser.role !== "admin"){
+    activePage = "dashboard";
+    return renderDashboard();
+  }
+
+  const query = document.getElementById("prestasiSearch")?.value || "";
+  const allPrestasi = adminPrestasiRows();
+  const rows = allPrestasi.filter(s =>
+    !query || s.name.toLowerCase().includes(query.toLowerCase()) || String(s.nis).includes(query)
+  );
+  const q = quranSummary();
+
+  document.getElementById("mainContent").innerHTML = `
+    <div class="section">
+      <div>
+        <h2>⭐ Siswa Berprestasi</h2>
+        <p class="muted">Khusus login Admin untuk mengetahui siapa saja siswa yang berprestasi.</p>
+      </div>
+    </div>
+
+    ${quranSummaryHtml()}
+
+    <div class="card no-print">
+      <input id="prestasiSearch" placeholder="Cari NIS atau nama siswa berprestasi..." value="${esc(query)}" oninput="renderAdminPrestasi()">
+      <div class="actions" style="margin-top:12px">
+        <button class="btn white" onclick="copyAdminPrestasiText()">Copy Rekap</button>
+        <button class="btn green" onclick="shareAdminPrestasiWhatsApp()">Share WA</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Daftar Berprestasi (${rows.length})</h3>
+      <p class="muted">Data ini diambil dari pilihan siswa pada halaman login siswa bagian Data Saya.</p>
+      <div class="student-list">
+        ${rows.length ? rows.map(s => `
+          <div class="student-item" style="padding:10px 12px">
+            <div class="compact-student-row">
+              <div>
+                <div class="student-name">⭐ ${esc(s.name)}</div>
+                <div class="student-nis">NIS ${esc(s.nis)} • ${esc(s.className)}</div>
+              </div>
+              <span class="pill ${quranPillClass(s.quranStatus)}">${s.quranStatus === "bisa" ? "✅" : "⏳"} ${quranShortLabel(s.quranStatus)}</span>
+            </div>
+          </div>
+        `).join("") : `<div class="empty">Belum ada siswa yang ditandai berprestasi.</div>`}
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h3>Preview Share WA</h3>
+      <div class="share-preview">${esc(adminPrestasiText())}</div>
+    </div>
+  `;
+}
+
+function normalizeState(data){
+  const safe = (data && typeof data === "object") ? data : {};
+  const attendance = (safe.attendance && typeof safe.attendance === "object") ? safe.attendance : {};
+
+  Object.keys(defaultAttendance).forEach(dateStr => {
+    attendance[dateStr] = {
+      ...defaultAttendance[dateStr],
+      ...(attendance[dateStr] || {})
+    };
+  });
+
+  const gradeSubjects = Array.isArray(safe.gradeSubjects) && safe.gradeSubjects.length
+    ? safe.gradeSubjects
+    : [...defaultSubjects];
+
+  const grades = (safe.grades && typeof safe.grades === "object") ? safe.grades : {};
+  const fees = (safe.fees && typeof safe.fees === "object") ? safe.fees : {};
+  gradeSubjects.forEach(subject => {
+    if(!grades[subject]) grades[subject] = {};
+  });
+
+  const baseStudents = (Array.isArray(safe.students) && safe.students.length)
+    ? safe.students.map(normalizeStudent)
+    : defaultStudents.map(normalizeStudent);
+
+  // Migrasi data: jika pengguna sudah punya storage lama, siswa Kelas 2 otomatis ditambahkan tanpa menghapus data lama.
+  const existingStudentKeys = new Set(baseStudents.flatMap(s => [String(s.id || ""), String(s.nis || "")]).filter(Boolean));
+  defaultStudents
+    .map(normalizeStudent)
+    .filter(s => s.className === "Kelas 2")
+    .forEach(s => {
+      if(!existingStudentKeys.has(String(s.id)) && !existingStudentKeys.has(String(s.nis))){
+        baseStudents.push(s);
+        existingStudentKeys.add(String(s.id));
+        existingStudentKeys.add(String(s.nis));
+      }
+    });
+
+  return {
+    schoolName: safe.schoolName || "Sekolah Absenku",
+    students: baseStudents.sort(sortByName),
+    attendance,
+    grades,
+    gradeSubjects,
+    fees,
+    updatedAt: safe.updatedAt || new Date().toISOString()
+  };
+}
+
+function loadState(){
+  try{
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if(saved) return normalizeState(JSON.parse(saved));
+  }catch(e){}
+
+  try{
+    const privateBackup = safeParseJSON(localStorage.getItem(PRIVATE_STORAGE_KEY), null);
+    const backupState = backupStateFromPayload(privateBackup);
+    if(backupState) return normalizeState(backupState);
+  }catch(e){}
+
+  return normalizeState({
+    schoolName:"Sekolah Absenku",
+    students:[...defaultStudents],
+    attendance:JSON.parse(JSON.stringify(defaultAttendance)),
+    grades:{},
+    gradeSubjects:[...defaultSubjects],
+    fees:{}
+  });
+}
+
+function saveLocalState(){
+  state.students.sort(sortByName);
+  state.updatedAt = new Date().toISOString();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  autoSavePrivateStorage();
+}
+
+function saveState(){
+  saveLocalState();
+  queueCloudSave();
+}
+
+function resetAllProgressData(){
+  if(currentUser?.role !== "admin") return alert("Fitur reset hanya untuk Admin.");
+  if(!confirm("Reset semua data absen, nilai, prestasi, dan status baca Al-Qur'an? Data siswa dan mata pelajaran tetap ada.")) return;
+  state.attendance = {};
+  state.grades = {};
+  (state.gradeSubjects || defaultSubjects).forEach(subject => { state.grades[subject] = {}; });
+  state.fees = {};
+  state.students = (state.students || []).map(s => ({
+    ...s,
+    quranStatus:"belum",
+    prestasi:false
+  })).sort(sortByName);
+  saveState();
+  overwritePrivateStorage("reset-admin-all");
+  fillClasses();
+  alert("Data berhasil direset seperti baru oleh Admin. Data siswa dan mata pelajaran tetap tersimpan.");
+  render();
+}
+
+function resetSelectedProgressData(type){
+  if(currentUser?.role !== "admin") return alert("Fitur reset hanya untuk Admin.");
+
+  const labels = {
+    attendance:"data absen/kehadiran",
+    grades:"data nilai",
+    fees:"data iuran bulanan",
+    achievement:"data prestasi dan status baca Al-Qur'an"
+  };
+  const label = labels[type] || "data";
+  if(!confirm(`Reset ${label}? Data siswa dan mata pelajaran tetap ada.`)) return;
+
+  if(type === "attendance"){
+    state.attendance = {};
+  }else if(type === "grades"){
+    state.grades = {};
+    (state.gradeSubjects || defaultSubjects).forEach(subject => { state.grades[subject] = {}; });
+  }else if(type === "fees"){
+    state.fees = {};
+  }else if(type === "achievement"){
+    state.students = (state.students || []).map(s => ({
+      ...s,
+      quranStatus:"belum",
+      prestasi:false
+    })).sort(sortByName);
+  }else{
+    return alert("Jenis reset tidak dikenal.");
+  }
+
+  saveState();
+  overwritePrivateStorage(`reset-admin-${type}`);
+  fillClasses();
+  alert(`${label} berhasil direset oleh Admin.`);
+  render();
+}
+
+function adminResetPanelHtml(){
+  if(currentUser?.role !== "admin") return "";
+  return `
+    <div class="card">
+      <h3>Reset Data Admin</h3>
+      <p class="muted">Khusus Admin. Gunakan ini untuk mengosongkan data berjalan tanpa menghapus data siswa, kelas, dan mata pelajaran.</p>
+      <div class="actions" style="margin-top:12px">
+        <button class="btn red" onclick="resetAllProgressData()">Reset Semua</button>
+        <button class="btn white" onclick="resetSelectedProgressData('attendance')">Reset Absen</button>
+        <button class="btn white" onclick="resetSelectedProgressData('grades')">Reset Nilai</button>
+        <button class="btn white" onclick="resetSelectedProgressData('fees')">Reset Iuran</button>
+        <button class="btn white" onclick="resetSelectedProgressData('achievement')">Reset Prestasi</button>
+      </div>
+      <p class="muted" style="margin-top:10px">Setelah reset, data otomatis menimpa storage pribadi. Jika memakai Cloudflare, tekan Upload Data Sekarang agar data online ikut bersih.</p>
+    </div>
+  `;
+}
+
+function adminResetDashboardCard(){
+  if(currentUser?.role !== "admin") return "";
+  return `
+    <div class="card no-print">
+      <h3>Reset Cepat Admin</h3>
+      <p class="muted">Kosongkan absen, nilai, iuran, prestasi, dan status baca Al-Qur'an agar aplikasi siap dipakai dari awal.</p>
+      <div class="actions">
+        <button class="btn red" onclick="resetAllProgressData()">Reset Seperti Baru</button>
+        <button class="btn white" onclick="activePage='backup';render()">Buka Data & Backup</button>
+      </div>
+    </div>
+  `;
+}
+
+
+function queueCloudSave(){
+  if(!cloudReady()) return;
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer = setTimeout(() => saveToCloud(false), 700);
+}
+
+async function syncFromCloud(showAlert=true){
+  if(!cloudReady()){
+    if(showAlert) alert("Masukkan URL Worker Cloudflare dulu di menu Data > Cloudflare Online.");
+    return false;
+  }
+
+  try{
+    cloudSyncInProgress = true;
+    cloudStatus = "syncing";
+    updateCloudStatusUI();
+
+    const res = await fetch(`${getCloudApiUrl()}/state`, {method:"GET", cache:"no-store"});
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    const remoteState = json.state || json;
+    if(!remoteState || !Array.isArray(remoteState.students)) throw new Error("Format data cloud tidak cocok");
+
+    state = normalizeState(remoteState);
+    saveLocalState();
+    fillClasses();
+    cloudStatus = "online";
+    updateCloudStatusUI();
+    if(currentUser) render();
+    if(showAlert) alert("Data berhasil diambil dari Cloudflare.");
+    return true;
+  }catch(err){
+    cloudStatus = "error";
+    updateCloudStatusUI();
+    if(showAlert) alert("Gagal mengambil data dari Cloudflare: " + err.message);
+    return false;
+  }finally{
+    cloudSyncInProgress = false;
+  }
+}
+
+async function saveToCloud(showAlert=true){
+  if(!cloudReady()){
+    if(showAlert) alert("Masukkan URL Worker Cloudflare dulu di menu Data > Cloudflare Online.");
+    return false;
+  }
+
+  try{
+    cloudStatus = "saving";
+    updateCloudStatusUI();
+    const res = await fetch(`${getCloudApiUrl()}/state`, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(state)
+    });
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    cloudStatus = "online";
+    updateCloudStatusUI();
+    if(showAlert) alert("Data berhasil disimpan ke Cloudflare.");
+    return true;
+  }catch(err){
+    cloudStatus = "error";
+    updateCloudStatusUI();
+    if(showAlert) alert("Gagal menyimpan data ke Cloudflare: " + err.message);
+    return false;
+  }
+}
+
+function setCloudApiUrl(){
+  const input = document.getElementById("cloudApiInput");
+  const url = (input?.value || "").trim().replace(/\/+$/, "");
+  if(!/^https:\/\//i.test(url)){
+    alert("URL Worker harus diawali https:// contoh: https://absenku-api.namaanda.workers.dev");
+    return;
+  }
+  localStorage.setItem(CLOUD_API_KEY, url);
+  cloudStatus = "offline";
+  updateCloudStatusUI();
+  alert("URL Cloudflare tersimpan. Tekan Ambil Data Cloud atau Upload Data Sekarang.");
+}
+
+function clearCloudApiUrl(){
+  if(!confirm("Hapus URL Cloudflare dari browser ini?")) return;
+  localStorage.removeItem(CLOUD_API_KEY);
+  cloudStatus = "offline";
+  updateCloudStatusUI();
+  renderBackup();
+}
+
+function sortByName(a,b){
+  return a.name.localeCompare(b.name,"id",{sensitivity:"base"});
+}
+
+function today(){
+  return new Date().toISOString().slice(0,10);
+}
+
+function nowTime(){
+  return new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+}
+
+function prettyDate(dateStr){
+  return new Date(dateStr + "T00:00:00").toLocaleDateString("id-ID",{
+    weekday:"long", day:"2-digit", month:"long", year:"numeric"
+  });
+}
+
+function esc(str=""){
+  return String(str).replace(/[&<>"']/g, s => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+  }[s]));
+}
+
+function classes(){
+  return [...new Set(state.students.map(s => s.className || "Umum"))].sort();
+}
+
+function fillClasses(){
+  const classEl = document.getElementById("loginClass");
+  if(classEl){
+    classEl.innerHTML = classes()
+      .map(k => `<option value="${esc(k)}">${esc(k)}</option>`)
+      .join("");
+  }
+
+  const studentEl = document.getElementById("loginStudent");
+  if(studentEl){
+    studentEl.innerHTML = state.students
+      .slice()
+      .sort(sortByName)
+      .map(s => `<option value="${esc(s.id)}">${esc(s.nis)} - ${esc(s.name)}</option>`)
+      .join("");
+  }
+
+  updateLoginStudentBox();
+}
+
+function updateLoginStudentBox(){
+  const role = document.getElementById("loginRole")?.value || "guru";
+  const box = document.getElementById("studentLoginBox");
+  if(box) box.classList.toggle("hidden", role !== "siswa");
+  if(role === "siswa") syncLoginStudentName(false);
+}
+
+function syncLoginStudentName(force=true){
+  const role = document.getElementById("loginRole")?.value || "guru";
+  if(role !== "siswa" && !force) return;
+  const id = document.getElementById("loginStudent")?.value || "";
+  const s = state.students.find(x => String(x.id) === String(id));
+  if(!s) return;
+  const nameEl = document.getElementById("loginName");
+  const classEl = document.getElementById("loginClass");
+  if(nameEl) nameEl.value = s.name;
+  if(classEl) classEl.value = s.className;
+}
+
+fillClasses();
+window.addEventListener("load", () => { updateLoginStudentBox(); syncFromCloud(false); });
+
+function login(){
+  const role = document.getElementById("loginRole").value;
+  let name = document.getElementById("loginName").value.trim() || "Pengguna";
+  let className = document.getElementById("loginClass").value || classes()[0] || "Kelas 1";
+  let studentId = "";
+
+  if(role === "siswa"){
+    studentId = document.getElementById("loginStudent")?.value || "";
+    const selectedStudent = state.students.find(s => String(s.id) === String(studentId));
+    if(selectedStudent){
+      name = selectedStudent.name;
+      className = selectedStudent.className;
+    }
+  }
+
+  currentUser = {name,role,className,studentId};
+  activePage = role === "siswa" ? "siswa" : "dashboard";
+  document.getElementById("loginView").classList.add("hidden");
+  document.getElementById("appView").classList.remove("hidden");
+  render();
+}
+
+function logout(){
+  currentUser = null;
+  document.getElementById("appView").classList.add("hidden");
+  document.getElementById("loginView").classList.remove("hidden");
+}
+
+function roleText(role){
+  if(role === "admin") return "Admin";
+  if(role === "guru") return "Guru";
+  return "Siswa";
+}
+
+function render(){
+  document.getElementById("userName").textContent = currentUser.name;
+  document.getElementById("userRole").textContent = roleText(currentUser.role) + " • " + currentUser.className;
+  renderNav();
+
+  if(activePage === "dashboard") renderDashboard();
+  if(activePage === "absensi") renderAttendance();
+  if(activePage === "siswa") renderStudent();
+  if(activePage === "data") renderStudents();
+  if(activePage === "rekap") renderReport();
+  if(activePage === "nilai") renderGrades();
+  if(activePage === "iuran") renderFees();
+  if(activePage === "prestasi") renderAdminPrestasi();
+  if(activePage === "backup") renderBackup();
+}
+
+
+function renderNav(){
+  const menus = currentUser.role === "siswa"
+    ? [
+        {id:"siswa", icon:"🏠", label:"Beranda"},
+        {id:"nilai", icon:"📊", label:"Nilai"},
+        {id:"iuran", icon:"💰", label:"Iuran"},
+        {id:"rekap", icon:"📄", label:"Riwayat"}
+      ]
+    : [
+        {id:"dashboard", icon:"🏠", label:"Home"},
+        {id:"absensi", icon:"✅", label:"Absen"},
+        {id:"data", icon:"👥", label:"Siswa"},
+        {id:"rekap", icon:"📄", label:"Rekap"},
+        {id:"nilai", icon:"📊", label:"Nilai"},
+        {id:"backup", icon:"💾", label:"Data"}
+      ];
+
+  if(currentUser.role === "admin"){
+    menus.splice(menus.length - 1, 0, {id:"iuran", icon:"💰", label:"Iuran"});
+    menus.splice(menus.length - 1, 0, {id:"prestasi", icon:"⭐", label:"Prestasi"});
+  }
+
+  const navEl = document.getElementById("nav");
+  navEl.style.gridTemplateColumns = `repeat(${menus.length},1fr)`;
+  navEl.innerHTML = menus.map(m => `
+    <button class="${activePage === m.id ? "active" : ""}" onclick="activePage='${m.id}';render()">
+      <span class="ico">${m.icon}</span>
+      <span>${m.label}</span>
+    </button>
+  `).join("");
+}
+
+
+function records(dateStr=today()){
+  return state.attendance[dateStr] || {};
+}
+
+function filteredStudents(query="", className="all"){
+  return state.students
+    .filter(s => className === "all" || s.className === className)
+    .filter(s => !query || s.name.toLowerCase().includes(query.toLowerCase()) || String(s.nis).includes(query))
+    .sort(sortByName);
+}
+
+function generateNextNis(){
+  const numbers = state.students
+    .map(s => parseInt(String(s.nis),10))
+    .filter(n => Number.isFinite(n) && String(n).startsWith("2605"));
+  const next = numbers.length ? Math.max(...numbers) + 1 : 260501;
+  return String(next);
+}
+
+function getSummary(dateStr=today(), className="all"){
+  const data = filteredStudents("", className);
+  const rec = records(dateStr);
+  const count = {Hadir:0,Izin:0,Sakit:0,Alpha:0,Belum:0,total:data.length};
+  data.forEach(s => {
+    const status = rec[s.id]?.status || "Belum";
+    count[status] = (count[status] || 0) + 1;
+  });
+  return count;
+}
+
+function stat(label,value){
+  return `<div class="stat"><b>${value}</b><span>${label}</span></div>`;
+}
+
+function statsHtml(dateStr=today(), className="all"){
+  const s = getSummary(dateStr, className);
+  return `<div class="stats">
+    ${stat("Siswa",s.total)}
+    ${stat("Hadir",s.Hadir)}
+    ${stat("Izin/Sakit",s.Izin+s.Sakit)}
+    ${stat("Alpha",s.Alpha)}
+  </div>`;
+}
+
+function statusIcon(status){
+  if(status === "Hadir") return "✅";
+  if(status === "Izin") return "📝";
+  if(status === "Sakit") return "🤒";
+  if(status === "Alpha") return "⚠️";
+  return "⏳";
+}
+
+function statusShort(status){
+  if(status === "Hadir") return "H";
+  if(status === "Izin") return "I";
+  if(status === "Sakit") return "S";
+  if(status === "Alpha") return "A";
+  return "-";
+}
+
+function renderDashboard(){
+  const s = getSummary(today());
+  const percent = s.total ? Math.round((s.Hadir / s.total) * 100) : 0;
+  document.getElementById("mainContent").innerHTML = `
+    <div class="section">
+      <div>
+        <h2>Dashboard</h2>
+        <p class="muted">${prettyDate(today())}</p>
+      </div>
+    </div>
+
+    ${statsHtml(today())}
+
+    <div class="card">
+      <h3>Absensi hari ini</h3>
+      <p class="muted">Kehadiran hari ini sudah mencapai <b>${percent}%</b>.</p>
+      <div class="actions">
+        <button class="btn primary" onclick="activePage='absensi';render()">Mulai Absen</button>
+        <button class="btn white" onclick="activePage='rekap';render()">Lihat Rekap</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Data siswa sesuai abjad</h3>
+      <div class="student-list">
+        ${state.students.slice(0,6).map(s => `
+          <div class="student-item">
+            <div class="student-name">${esc(s.name)}</div>
+            <div class="student-nis">NIS ${esc(s.nis)} • ${esc(s.className)}</div>
+          </div>
+        `).join("")}
+      </div>
+      <p class="muted" style="margin:12px 0 0">Total ${state.students.length} siswa.</p>
+    </div>
+
+    ${currentUser.role === "admin" ? adminPrestasiDashboardCard() : ""}
+    ${currentUser.role === "admin" ? adminFeeDashboardCard() : ""}
+    ${currentUser.role === "admin" ? adminResetDashboardCard() : ""}
+  `;
+}
+
+function renderAttendance(){
+  const dateStr = document.getElementById("attDate")?.value || today();
+  const query = document.getElementById("attSearch")?.value || "";
+  const cls = document.getElementById("attClass")?.value || "all";
+  const data = filteredStudents(query, cls);
+
+  document.getElementById("mainContent").innerHTML = `
+    <div id="captureArea">
+      <div class="section">
+        <div>
+          <h2>Absensi</h2>
+          <p class="muted">${prettyDate(dateStr)}</p>
+        </div>
+      </div>
+
+      ${statsHtml(dateStr, cls)}
+
+      <div class="card no-print">
+        <div class="filter">
+          <input id="attDate" type="date" value="${dateStr}" onchange="renderAttendance()">
+          <input id="attSearch" placeholder="Cari NIS atau nama..." value="${esc(query)}" oninput="renderAttendance()">
+          <select id="attClass" onchange="renderAttendance()">
+            <option value="all">Semua kelas</option>
+            ${classes().map(k => `<option value="${esc(k)}" ${cls === k ? "selected" : ""}>${esc(k)}</option>`).join("")}
+          </select>
+        </div>
+      </div>
+
+      <div class="card no-print">
+        <div class="actions">
+          <button class="btn green" onclick="markAllPresent()">Semua Hadir</button>
+          <button class="btn white" onclick="copyShareText()">Copy Share</button>
+          <button class="btn white" onclick="shareWhatsApp()">Share WA</button>
+          <button class="btn white" onclick="downloadJPG()">Simpan JPG</button>
+        </div>
+      </div>
+
+      <div class="attendance-check-head no-print">
+        <span>Nama Siswa</span>
+        <span>Keterangan</span>
+      </div>
+
+      <div class="student-list">
+        ${renderStudentCards(data,dateStr)}
+      </div>
+    </div>
+  `;
+}
+
+function renderStudentCards(data,dateStr){
+  if(!data.length) return `<div class="card empty">Data siswa tidak ditemukan.</div>`;
+
+  const rec = records(dateStr);
+  return data.map(s => {
+    const r = rec[s.id] || {};
+    const status = r.status || "Belum";
+    return `
+      <div class="student-item attendance-check-card">
+        <div class="attendance-check-main">
+          <div class="attendance-check-name">
+            <span class="name">${esc(s.name)}</span>
+            <div class="student-nis">NIS ${esc(s.nis)}${r.time ? " • " + r.time : ""}</div>
+          </div>
+          <div class="attendance-check-options" aria-label="Keterangan kehadiran ${esc(s.name)}">
+            ${["Hadir","Izin","Sakit","Alpha"].map(x => `
+              <button title="${x}" aria-label="${x}" data-status="${x}" class="attendance-circle-btn ${status === x ? "active" : ""}" onclick="setStatus('${dateStr}','${s.id}','${x}')">
+                <span class="circle">${status === x ? "✓" : ""}</span>
+                <span class="short">${statusShort(x)}</span>
+              </button>
+            `).join("")}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function setStatus(dateStr,id,status){
+  if(!state.attendance[dateStr]) state.attendance[dateStr] = {};
+  state.attendance[dateStr][id] = {
+    status,
+    time:nowTime(),
+    by:currentUser?.name || "Sistem",
+    updatedAt:new Date().toISOString()
+  };
+  saveState();
+  renderAttendance();
+}
+
+function markAllPresent(){
+  const dateStr = document.getElementById("attDate")?.value || today();
+  const cls = document.getElementById("attClass")?.value || "all";
+  const query = document.getElementById("attSearch")?.value || "";
+
+  filteredStudents(query, cls).forEach(s => {
+    if(!state.attendance[dateStr]) state.attendance[dateStr] = {};
+    if(!state.attendance[dateStr][s.id]){
+      state.attendance[dateStr][s.id] = {
+        status:"Hadir",
+        time:nowTime(),
+        by:currentUser?.name || "Sistem",
+        updatedAt:new Date().toISOString()
+      };
+    }
+  });
+
+  saveState();
+  renderAttendance();
+}
+
+function findCurrentStudent(){
+  if(!currentUser) return null;
+  const selectedId = String(currentUser.studentId || "").trim();
+  if(selectedId){
+    const byId = state.students.find(s => String(s.id) === selectedId || String(s.nis) === selectedId);
+    if(byId) return byId;
+  }
+
+  const name = String(currentUser.name || "").toLowerCase().trim();
+  return state.students.find(s => s.name.toLowerCase().trim() === name)
+      || state.students.find(s => s.name.toLowerCase().includes(name))
+      || state.students.find(s => name.includes(s.name.toLowerCase().trim()));
+}
+
+function renderStudentPickerCard(){
+  return `
+    <div class="card">
+      <h3>Pilih Data Siswa</h3>
+      <p class="muted">Data login belum cocok. Pilih NIS lalu nama siswa di bawah supaya fitur Data Saya muncul.</p>
+      <label>NIS - Nama siswa</label>
+      <select id="studentPagePicker">
+        ${state.students.slice().sort(sortByName).map(s => `<option value="${esc(s.id)}">${esc(s.nis)} - ${esc(s.name)}</option>`).join("")}
+      </select>
+      <button class="btn primary full" style="margin-top:12px" onclick="selectStudentForLogin()">Gunakan Data Ini</button>
+    </div>
+  `;
+}
+
+function selectStudentForLogin(){
+  const id = document.getElementById("studentPagePicker")?.value || "";
+  const s = state.students.find(x => String(x.id) === String(id));
+  if(!s) return alert("Data siswa tidak ditemukan.");
+  currentUser = { ...currentUser, name:s.name, className:s.className, studentId:s.id };
+  render();
+}
+
+function renderStudentSwitchCard(student){
+  const currentId = String(student?.id || currentUser?.studentId || "");
+  const options = state.students
+    .slice()
+    .sort(sortByName)
+    .map(s => `<option value="${esc(s.id)}" ${String(s.id) === currentId ? "selected" : ""}>${esc(s.nis)} - ${esc(s.name)} • ${esc(s.className)}</option>`)
+    .join("");
+
+  return `
+    <div class="card student-switch-card no-print">
+      <h3>Ganti Siswa Cepat</h3>
+      <p class="muted" style="margin-bottom:10px">Pilih NIS lalu nama untuk berpindah siswa tanpa keluar dan login ulang.</p>
+      <div class="student-switch-row">
+        <div>
+          <label>NIS - Nama siswa</label>
+          <select id="studentQuickSwitch" onchange="switchStudentFromPage()">${options}</select>
+        </div>
+        <button class="btn primary" onclick="switchStudentFromPage()">Pilih</button>
+      </div>
+    </div>
+  `;
+}
+
+function switchStudentFromPage(){
+  const id = document.getElementById("studentQuickSwitch")?.value || document.getElementById("studentPagePicker")?.value || "";
+  const s = state.students.find(x => String(x.id) === String(id));
+  if(!s) return alert("Data siswa tidak ditemukan.");
+  currentUser = { ...currentUser, name:s.name, className:s.className, studentId:s.id };
+  render();
+}
+
+function renderStudent(){
+  const student = findCurrentStudent();
+  const dateStr = today();
+  const rec = student ? (records(dateStr)[student.id] || {}) : {};
+
+  document.getElementById("mainContent").innerHTML = `
+    <div class="student-hero">
+      <h2>Halo, ${esc(student?.name || currentUser.name)}</h2>
+      <p class="muted">Silakan absen masuk/pulang dan lengkapi Data Saya.</p>
+      ${student ? `
+        <div class="actions">
+          <button class="btn green" onclick="studentCheck('masuk')">Absen Masuk</button>
+          <button class="btn dark" onclick="studentCheck('pulang')">Absen Pulang</button>
+        </div>
+      ` : `<p>Nama login belum cocok dengan data siswa.</p>`}
+    </div>
+
+    ${student ? renderStudentSwitchCard(student) : ""}
+
+    ${student ? `
+      <div class="card">
+        <h3>Data Saya</h3>
+        <p class="muted" style="margin-bottom:10px">NIS ${esc(student.nis)} • ${esc(student.className)}</p>
+        ${quranStudentBadges(student)}
+        <div class="quran-actions no-print" style="margin-top:10px">
+          <button class="btn ${student.prestasi ? 'green' : 'white'}" onclick="togglePrestasi('${student.id}'); renderStudent()">⭐ Berprestasi</button>
+          <button class="btn ${student.quranStatus === 'bisa' ? 'green' : 'white'}" onclick="setQuranStatus('${student.id}','bisa'); renderStudent()">✅ Bisa Baca</button>
+          <button class="btn ${student.quranStatus === 'belum' ? 'red' : 'white'}" onclick="setQuranStatus('${student.id}','belum'); renderStudent()">⏳ Belum Bisa</button>
+        </div>
+        <p class="quran-mini-text">Bagian ini hanya muncul saat login sebagai siswa. Data tersimpan otomatis.</p>
+      </div>
+    ` : renderStudentPickerCard()}
+
+    ${student ? renderStudentFeeCard(student) : ""}
+
+    <div class="card">
+      <h3>Status hari ini</h3>
+      <span class="pill ${rec.status || "Belum"}">${statusIcon(rec.status || "Belum")} ${rec.status || "Belum"}</span>
+      <p class="muted" style="margin-top:10px">
+        Masuk: ${rec.masuk || rec.time || "-"}<br>
+        Pulang: ${rec.pulang || "-"}
+      </p>
+    </div>
+
+    <div class="section"><h2>Riwayat</h2></div>
+    ${student ? renderStudentHistory(student.id) : `<div class="card empty">Riwayat belum tersedia. Pilih Data Siswa dulu.</div>`}
+  `;
+}
+
+function studentCheck(type){
+  const student = findCurrentStudent();
+  if(!student) return alert("Nama login belum cocok dengan data siswa.");
+
+  const dateStr = today();
+  if(!state.attendance[dateStr]) state.attendance[dateStr] = {};
+  const old = state.attendance[dateStr][student.id] || {};
+  state.attendance[dateStr][student.id] = {
+    ...old,
+    status:"Hadir",
+    [type]:nowTime(),
+    time:old.time || nowTime(),
+    by:currentUser.name,
+    updatedAt:new Date().toISOString()
+  };
+  saveState();
+  renderStudent();
+}
+
+function renderStudentHistory(id){
+  const rows = Object.keys(state.attendance).sort().reverse().map(dateStr => {
+    const r = state.attendance[dateStr][id];
+    if(!r) return "";
+    return `
+      <div class="student-item">
+        <div class="student-head">
+          <div>
+            <div class="student-name">${prettyDate(dateStr)}</div>
+            <div class="student-nis">Masuk ${r.masuk || r.time || "-"} • Pulang ${r.pulang || "-"}</div>
+          </div>
+          <span class="pill ${r.status}">${statusIcon(r.status)} ${r.status}</span>
+        </div>
+      </div>
+    `;
+  }).filter(Boolean).join("");
+
+  return rows || `<div class="card empty">Belum ada riwayat.</div>`;
+}
+
+function renderStudents(){
+  const query = document.getElementById("studentSearch")?.value || "";
+  const data = filteredStudents(query,"all");
+  const nextNis = generateNextNis();
+
+  document.getElementById("mainContent").innerHTML = `
+    <div class="section">
+      <div>
+        <h2>Data Siswa</h2>
+        <p class="muted">Otomatis disusun sesuai abjad. Guru/Admin bisa tambah, edit, dan hapus data siswa. Pengaturan prestasi dan baca Al-Qur'an tetap berada di login siswa.</p>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <label>NIS</label>
+      <input id="newNis" placeholder="Contoh: ${nextNis}" value="${nextNis}">
+
+      <label>Nama siswa</label>
+      <input id="newName" placeholder="Nama lengkap">
+
+      <label>Kelas</label>
+      <input id="newClass" placeholder="Contoh: Kelas 1" value="${esc(currentUser.className || "Kelas 1")}">
+
+      <button class="btn primary full" style="margin-top:14px" onclick="addStudent()">Tambah Siswa</button>
+    </div>
+
+    <div class="card no-print">
+      <input id="studentSearch" placeholder="Cari siswa..." value="${esc(query)}" oninput="renderStudents()">
+    </div>
+
+    <div class="student-list">
+      ${data.map(s => `
+        <div class="student-item">
+          <div class="student-head">
+            <div>
+              <div class="student-name">${esc(s.name)}</div>
+              <div class="student-nis">NIS ${esc(s.nis)} • ${esc(s.className)}</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+              <button class="btn small white no-print" onclick="editStudent('${s.id}')">Edit</button>
+              <button class="btn small red no-print" onclick="deleteStudent('${s.id}')">Hapus</button>
+            </div>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function addStudent(){
+  const nis = document.getElementById("newNis").value.trim() || "-";
+  const name = document.getElementById("newName").value.trim();
+  const className = document.getElementById("newClass").value.trim() || "Kelas 1";
+
+  if(!name) return alert("Nama siswa wajib diisi.");
+
+  const id = state.students.some(s => s.id === nis) ? "s-" + Date.now() : nis;
+  state.students.push(normalizeStudent({
+    id,
+    nis,
+    name,
+    className,
+    quranStatus:"belum",
+    prestasi:false
+  }));
+
+  saveState();
+  fillClasses();
+  renderStudents();
+}
+
+function moveStudentDataKey(oldId,newId){
+  oldId = String(oldId || "");
+  newId = String(newId || "");
+  if(!oldId || !newId || oldId === newId) return;
+
+  Object.values(state.attendance || {}).forEach(day => {
+    if(day && Object.prototype.hasOwnProperty.call(day, oldId)){
+      day[newId] = day[oldId];
+      delete day[oldId];
+    }
+  });
+
+  Object.values(state.grades || {}).forEach(subjectData => {
+    if(subjectData && Object.prototype.hasOwnProperty.call(subjectData, oldId)){
+      subjectData[newId] = subjectData[oldId];
+      delete subjectData[oldId];
+    }
+  });
+
+  Object.values(state.fees || {}).forEach(monthData => {
+    if(monthData && Object.prototype.hasOwnProperty.call(monthData, oldId)){
+      monthData[newId] = monthData[oldId];
+      delete monthData[oldId];
+    }
+  });
+}
+
+function editStudent(id){
+  const s = state.students.find(x => String(x.id) === String(id));
+  if(!s) return alert("Data siswa tidak ditemukan.");
+
+  const nis = prompt("Edit NIS siswa:", s.nis || "");
+  if(nis === null) return;
+  const newNis = String(nis).trim();
+  if(!newNis) return alert("NIS tidak boleh kosong.");
+
+  const name = prompt("Edit nama siswa:", s.name || "");
+  if(name === null) return;
+  const newName = String(name).trim();
+  if(!newName) return alert("Nama siswa tidak boleh kosong.");
+
+  const kelas = prompt("Edit kelas siswa:", s.className || currentUser.className || "Kelas 1");
+  if(kelas === null) return;
+  const newClass = String(kelas).trim() || "Kelas 1";
+
+  const duplicate = state.students.some(x => x !== s && (String(x.nis) === newNis || String(x.id) === newNis));
+  if(duplicate) return alert("NIS tersebut sudah dipakai siswa lain.");
+
+  const oldId = s.id;
+  s.id = newNis;
+  s.nis = newNis;
+  s.name = newName;
+  s.className = newClass;
+  moveStudentDataKey(oldId, newNis);
+
+  if(currentUser && String(currentUser.studentId || "") === String(oldId)){
+    currentUser.studentId = newNis;
+    currentUser.name = newName;
+    currentUser.className = newClass;
+  }
+
+  saveState();
+  fillClasses();
+  alert("Data siswa berhasil diedit.");
+  renderStudents();
+}
+
+function deleteStudent(id){
+  if(!confirm("Hapus siswa ini? Data absen dan nilai siswa tersebut juga akan dihapus.")) return;
+  state.students = state.students.filter(s => String(s.id) !== String(id));
+  Object.values(state.attendance || {}).forEach(day => { if(day) delete day[id]; });
+  Object.values(state.grades || {}).forEach(subjectData => { if(subjectData) delete subjectData[id]; });
+  Object.values(state.fees || {}).forEach(monthData => { if(monthData) delete monthData[id]; });
+  saveState();
+  fillClasses();
+  renderStudents();
+}
+
+function rowsForShare(dateStr, className="all"){
+  const rec = records(dateStr);
+  return state.students
+    .slice()
+    .filter(s => className === "all" || s.className === className)
+    .sort(sortByName)
+    .map(s => {
+      const r = rec[s.id] || {};
+      return {
+        nis:s.nis,
+        name:s.name,
+        className:s.className,
+        status:r.status || "Belum",
+        time:r.time || "",
+        masuk:r.masuk || "",
+        pulang:r.pulang || "",
+        by:r.by || ""
+      };
+    });
+}
+
+function visibleTextLength(str){
+  return Array.from(String(str ?? "")).length;
+}
+
+function padRightText(str,width){
+  const text = String(str ?? "");
+  return text + " ".repeat(Math.max(0, width - visibleTextLength(text)));
+}
+
+function shortNameForShare(name, maxWidth=10){
+  const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+  if(!parts.length) return "-";
+
+  const cleanPart = part => String(part || "")
+    .replace(/^[^A-Za-zÀ-ÖØ-öø-ÿ0-9]+|[^A-Za-zÀ-ÖØ-öø-ÿ0-9]+$/g, "");
+
+  const first = cleanPart(parts[0]) || parts[0];
+  const initials = parts.slice(1)
+    .map(part => cleanPart(part))
+    .filter(Boolean)
+    .map(part => part[0].toUpperCase())
+    .join("");
+
+  let result = initials ? `${first} ${initials}` : first;
+
+  // Agar tidak turun baris di WhatsApp, batasi nama maksimal 10 karakter.
+  if(visibleTextLength(result) > maxWidth){
+    const oneInitial = initials ? `${first} ${initials[0]}` : first;
+    result = visibleTextLength(oneInitial) <= maxWidth ? oneInitial : first;
+  }
+  if(visibleTextLength(result) > maxWidth){
+    result = Array.from(result).slice(0, Math.max(1, maxWidth - 1)).join("") + "…";
+  }
+  return result;
+}
+
+function statusShortForShare(status){
+  const map = {Hadir:"H", Izin:"I", Sakit:"S", Alpha:"A", Belum:"B"};
+  return map[status] || String(status || "-").slice(0,1).toUpperCase();
+}
+
+function makeAlignedShareTable(rows){
+  const compactRows = rows.map(r => ({
+    ...r,
+    shortName:shortNameForShare(r.name, 10),
+    shortStatus:statusShortForShare(r.status)
+  }));
+  const nisWidth = 6;
+  const nameWidth = 10;
+  const ketWidth = 1;
+  const gapNisNama = " ";
+  const gapNamaKet = "  "; // Tambahan 1 spasi agar keterangan tidak berdempetan dengan nama.
+
+  const header = `${padRightText("NIS", nisWidth)}${gapNisNama}${padRightText("Nama", nameWidth)}${gapNamaKet}${padRightText("K", ketWidth)}`;
+  const line = `${"-".repeat(nisWidth)}${gapNisNama}${"-".repeat(nameWidth)}${gapNamaKet}${"-".repeat(ketWidth)}`;
+  const body = compactRows.map(r =>
+    `${padRightText(r.nis, nisWidth)}${gapNisNama}${padRightText(r.shortName, nameWidth)}${gapNamaKet}${padRightText(r.shortStatus, ketWidth)}`
+  ).join("\n");
+
+  return [header, line, body].filter(Boolean).join("\n");
+}
+
+function shareText(dateStr, className="all"){
+  const s = getSummary(dateStr, className);
+  const rows = rowsForShare(dateStr, className);
+  const tableText = makeAlignedShareTable(rows);
+  const fence = "```";
+  return `REKAP ABSENSI
+${state.schoolName}
+Kelas: ${className === "all" ? "Semua Kelas" : className}
+${prettyDate(dateStr)}
+
+Total Siswa : ${s.total}
+Hadir       : ${s.Hadir}
+Izin        : ${s.Izin}
+Sakit       : ${s.Sakit}
+Alpha       : ${s.Alpha}
+Belum       : ${s.Belum}
+
+Ket: H=Hadir I=Izin S=Sakit A=Alpha B=Belum
+
+${fence}
+${tableText}
+${fence}`;
+}
+
+function renderReport(){
+  const dateStr = document.getElementById("reportDate")?.value || today();
+  const cls = document.getElementById("reportClass")?.value || "all";
+  const rows = rowsForShare(dateStr, cls);
+
+  document.getElementById("mainContent").innerHTML = `
+    <div class="section no-print">
+      <div>
+        <h2>Rekap</h2>
+        <p class="muted">Rekap super ringkas: nama panjang disingkat, keterangan dibuat kode H/I/S/A/B agar rapi saat share WhatsApp.</p>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <div class="filter">
+        <input id="reportDate" type="date" value="${dateStr}" onchange="renderReport()">
+        <select id="reportClass" onchange="renderReport()">
+          <option value="all">Semua kelas</option>
+          ${classes().map(k => `<option value="${esc(k)}" ${cls === k ? "selected" : ""}>${esc(k)}</option>`).join("")}
+        </select>
+      </div>
+    </div>
+
+    ${statsHtml(dateStr, cls)}
+
+    <div class="card no-print">
+      <div class="actions">
+        <button class="btn white" onclick="copyShareText()">Copy Share</button>
+        <button class="btn white" onclick="shareWhatsApp()">Share WA</button>
+        <button class="btn white" onclick="exportCSV()">CSV</button>
+        <button class="btn white" onclick="downloadJPG('reportArea')">JPG</button>
+      </div>
+    </div>
+
+    <div id="reportArea" class="report-box">
+      <div class="report-head">
+        <h3>${esc(state.schoolName)}</h3>
+        <p class="muted" style="margin:0">Rekap Absensi Minimal • ${prettyDate(dateStr)}</p>
+      </div>
+
+      <div class="attendance-report-row head">
+        <div>NIS</div>
+        <div>Nama</div>
+        <div>Ket.</div>
+      </div>
+
+      ${rows.map(r => `
+        <div class="attendance-report-row">
+          <div>${esc(r.nis)}</div>
+          <div class="attendance-report-short-name" title="${esc(r.name)}">${esc(shortNameForShare(r.name))}</div>
+          <div><span class="pill ${r.status}" title="${esc(r.status)}">${esc(statusShortForShare(r.status))}</span></div>
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="card no-print" style="margin-top:12px">
+      <h3>Preview teks share</h3>
+      <div class="share-preview">${esc(shareText(dateStr))}</div>
+    </div>
+  `;
+}
+
+function copyShareText(){
+  const dateStr = document.getElementById("attDate")?.value || document.getElementById("reportDate")?.value || today();
+  const cls = document.getElementById("attClass")?.value || document.getElementById("reportClass")?.value || "all";
+  navigator.clipboard.writeText(shareText(dateStr, cls));
+  alert("Teks share berhasil disalin.");
+}
+
+function shareWhatsApp(){
+  const dateStr = document.getElementById("attDate")?.value || document.getElementById("reportDate")?.value || today();
+  const cls = document.getElementById("attClass")?.value || document.getElementById("reportClass")?.value || "all";
+  const text = encodeURIComponent(shareText(dateStr, cls));
+  window.open(`https://wa.me/?text=${text}`,"_blank");
+}
+
+function exportCSV(){
+  const dateStr = document.getElementById("attDate")?.value || document.getElementById("reportDate")?.value || today();
+  const cls = document.getElementById("attClass")?.value || document.getElementById("reportClass")?.value || "all";
+  const rows = rowsForShare(dateStr, cls);
+  const csvRows = [
+    ["NIS","Nama","Keterangan","Kelas","Jam"].join(","),
+    ...rows.map(r => [
+      r.nis,
+      r.name,
+      r.status,
+      r.className,
+      r.time
+    ].map(x => `"${String(x).replaceAll('"','""')}"`).join(","))
+  ];
+  downloadFile(`rekap-absenku-${dateStr}.csv`, csvRows.join("\n"), "text/csv;charset=utf-8");
+}
+
+async function downloadJPG(targetId="captureArea"){
+  const el = document.getElementById(targetId) || document.getElementById("mainContent");
+  if(!window.html2canvas){
+    alert("Fitur JPG membutuhkan internet. Gunakan screenshot HP jika offline.");
+    return;
+  }
+
+  const canvas = await html2canvas(el,{backgroundColor:"#ffffff",scale:2});
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `absenku-${today()}.jpg`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, "image/jpeg", 0.92);
+}
+
+function downloadFile(filename,text,type){
+  try{
+    const blob = new Blob([text],{type});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+      a.remove();
+    }, 600);
+  }catch(err){
+    alert("Gagal membuat file download: " + err.message);
+  }
+}
+
+
+
+
+function ensureGradeSubject(subject){
+  const name = String(subject || "").trim();
+  if(!name) return "";
+  if(!state.gradeSubjects.includes(name)){
+    state.gradeSubjects.push(name);
+    state.gradeSubjects.sort((a,b) => a.localeCompare(b,"id",{sensitivity:"base"}));
+  }
+  if(!state.grades) state.grades = {};
+  if(!state.grades[name]) state.grades[name] = {};
+  return name;
+}
+
+function getSelectedSubject(){
+  return document.getElementById("gradeSubject")?.value || state.gradeSubjects?.[0] || defaultSubjects[0] || "Matematika";
+}
+
+function getGradeRecord(subject, studentId){
+  return state.grades?.[subject]?.[studentId] || {};
+}
+
+function getGradeValue(subject, studentId){
+  const record = getGradeRecord(subject, studentId);
+  return record.nilai === 0 || record.nilai ? String(record.nilai) : "";
+}
+
+function getGradeNote(subject, studentId){
+  return getGradeRecord(subject, studentId).catatan || "";
+}
+
+function predikatNilai(nilai){
+  if(nilai === "" || nilai === null || nilai === undefined || Number.isNaN(Number(nilai))) return "Belum";
+  const n = Number(nilai);
+  if(n >= 90) return "A";
+  if(n >= 80) return "B";
+  if(n >= 70) return "C";
+  if(n >= 60) return "D";
+  return "E";
+}
+
+function predikatText(nilai){
+  const p = predikatNilai(nilai);
+  if(p === "A") return "A • Sangat Baik";
+  if(p === "B") return "B • Baik";
+  if(p === "C") return "C • Cukup";
+  if(p === "D") return "D • Perlu Bimbingan";
+  if(p === "E") return "E • Perlu Perhatian";
+  return "Belum Dinilai";
+}
+
+function gradeStats(subject, className="all"){
+  const students = filteredStudents("", className);
+  const scores = students
+    .map(s => Number(getGradeValue(subject, s.id)))
+    .filter(n => Number.isFinite(n));
+  const total = students.length;
+  const filled = scores.length;
+  const avg = filled ? Math.round((scores.reduce((a,b)=>a+b,0) / filled) * 10) / 10 : "-";
+  const high = filled ? Math.max(...scores) : "-";
+  const low = filled ? Math.min(...scores) : "-";
+  return {total, filled, empty: total - filled, avg, high, low};
+}
+
+function gradeStatsHtml(subject){
+  const s = gradeStats(subject);
+  return `<div class="stats">
+    ${stat("Siswa",s.total)}
+    ${stat("Sudah Dinilai",s.filled)}
+    ${stat("Rata-rata",s.avg)}
+    ${stat("Belum Dinilai",s.empty)}
+  </div>`;
+}
+
+function setGradeFromInput(el){
+  const subject = ensureGradeSubject(el.dataset.subject);
+  const studentId = el.dataset.id;
+  const scoreEl = document.getElementById(`grade-score-${studentId}`);
+  const raw = (scoreEl?.value || "").trim();
+
+  if(raw !== ""){
+    const n = Number(raw);
+    if(!Number.isFinite(n) || n < 0 || n > 100){
+      alert("Nilai harus angka 0 sampai 100.");
+      renderGrades();
+      return;
+    }
+  }
+
+  if(!state.grades) state.grades = {};
+  if(!state.grades[subject]) state.grades[subject] = {};
+
+  if(raw === ""){
+    delete state.grades[subject][studentId];
+  }else{
+    state.grades[subject][studentId] = {
+      nilai: Number(raw),
+      by: currentUser?.name || "Sistem",
+      updatedAt: new Date().toISOString()
+    };
+  }
+
+  saveState();
+  renderGrades();
+}
+
+function addGradeSubject(){
+  const input = document.getElementById("newSubjectName");
+  const name = (input?.value || "").trim();
+  if(!name) return alert("Nama mata pelajaran wajib diisi.");
+  ensureGradeSubject(name);
+  saveState();
+  renderGrades();
+}
+
+function deleteGradeSubject(){
+  const subject = getSelectedSubject();
+  if(!subject) return;
+  if(!confirm(`Hapus mata pelajaran "${subject}" beserta semua nilainya?`)) return;
+  state.gradeSubjects = state.gradeSubjects.filter(s => s !== subject);
+  if(state.grades) delete state.grades[subject];
+  if(!state.gradeSubjects.length) state.gradeSubjects = [...defaultSubjects];
+  saveState();
+  renderGrades();
+}
+
+function rowsForGrades(subject){
+  return state.students
+    .slice()
+    .sort(sortByName)
+    .map(s => {
+      const record = getGradeRecord(subject, s.id);
+      const nilai = record.nilai === 0 || record.nilai ? record.nilai : "";
+      return {
+        nis:s.nis,
+        name:s.name,
+        className:s.className,
+        nilai,
+        predikat:predikatNilai(nilai)
+      };
+    });
+}
+
+function makeAlignedGradeShareTable(rows){
+  const compactRows = rows.map(r => ({
+    ...r,
+    // Nama dibuat sedikit lebih pendek agar kolom Nilai bisa ditulis penuh tanpa melebar.
+    shortName: shortNameForShare(r.name, 9),
+    shortNilai: (r.nilai === "" || r.nilai === null || r.nilai === undefined) ? "-" : String(r.nilai)
+  }));
+  const nisWidth = 6;
+  const nameWidth = 9;
+  const nilaiWidth = 5; // Agar judul kolom tertulis lengkap: Nilai.
+  const gapNisNama = " ";
+  const gapNamaNilai = "    "; // Kolom angka nilai diberi tambahan 3 spasi agar tidak berdempetan dengan nama saat share WA.
+
+  const header = `${padRightText("NIS", nisWidth)}${gapNisNama}${padRightText("Nama", nameWidth)}${gapNamaNilai}${padRightText("Nilai", nilaiWidth)}`;
+  const line = `${"-".repeat(nisWidth)}${gapNisNama}${"-".repeat(nameWidth)}${gapNamaNilai}${"-".repeat(nilaiWidth)}`;
+  const body = compactRows.map(r =>
+    `${padRightText(r.nis, nisWidth)}${gapNisNama}${padRightText(r.shortName, nameWidth)}${gapNamaNilai}${padRightText(r.shortNilai, nilaiWidth)}`
+  ).join("\n");
+
+  return [header, line, body].filter(Boolean).join("\n");
+}
+
+function gradeShareText(subject, className="all"){
+  const rows = rowsForGrades(subject).filter(r => className === "all" || r.className === className);
+  const tableText = makeAlignedGradeShareTable(rows);
+  const s = gradeStats(subject, className);
+  const fence = "```";
+  return `REKAP NILAI
+${state.schoolName}
+Mapel : ${String(subject || "-")}
+Kelas : ${className === "all" ? "Semua Kelas" : className}
+${prettyDate(today())}
+
+Siswa : ${s.total}
+Terisi: ${s.filled}
+Rata² : ${s.avg}
+
+${fence}
+${tableText}
+${fence}`;
+}
+function copyGradeText(){
+  const subject = getSelectedSubject();
+  const cls = document.getElementById("gradeClass")?.value || "all";
+  navigator.clipboard.writeText(gradeShareText(subject, cls));
+  alert("Teks rekap nilai berhasil disalin.");
+}
+
+function shareGradeWhatsApp(){
+  const subject = getSelectedSubject();
+  const cls = document.getElementById("gradeClass")?.value || "all";
+  const text = encodeURIComponent(gradeShareText(subject, cls));
+  window.open(`https://wa.me/?text=${text}`,"_blank");
+}
+
+function exportGradesCSV(){
+  const subject = getSelectedSubject();
+  const cls = document.getElementById("gradeClass")?.value || "all";
+  const rows = rowsForGrades(subject).filter(r => cls === "all" || r.className === cls);
+  const csvRows = [
+    ["NIS","Nama","Kelas","Mata Pelajaran","Nilai","Predikat"].join(","),
+    ...rows.map(r => [
+      r.nis,
+      r.name,
+      r.className,
+      subject,
+      r.nilai,
+      r.predikat
+    ].map(x => `"${String(x).replaceAll('"','""')}"`).join(","))
+  ];
+  downloadFile(`rekap-nilai-${subject.toLowerCase().replace(/[^a-z0-9]+/gi,"-")}-${today()}.csv`, csvRows.join("\n"), "text/csv;charset=utf-8");
+}
+
+function renderStudentGrades(student){
+  const rows = state.gradeSubjects.map(subject => {
+    const record = getGradeRecord(subject, student.id);
+    const nilai = record.nilai === 0 || record.nilai ? record.nilai : "";
+    const pred = predikatNilai(nilai);
+    return {subject, nilai, pred};
+  });
+  const scores = rows.map(r => Number(r.nilai)).filter(n => Number.isFinite(n));
+  const avg = scores.length ? Math.round((scores.reduce((a,b)=>a+b,0)/scores.length)*10)/10 : "-";
+
+  return `
+    <div class="section">
+      <div>
+        <h2>Nilai Saya</h2>
+        <p class="muted">NIS ${esc(student.nis)} • ${esc(student.className)}</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      ${stat("Mapel",state.gradeSubjects.length)}
+      ${stat("Sudah Dinilai",scores.length)}
+      ${stat("Rata-rata",avg)}
+      ${stat("Belum",state.gradeSubjects.length - scores.length)}
+    </div>
+
+    <div class="report-box">
+      <div class="grade-row head">
+        <div>Nilai</div>
+        <div>Mata Pelajaran</div>
+        <div>Pred.</div>
+      </div>
+      ${rows.map(r => `
+        <div class="grade-row">
+          <div><b>${esc(r.nilai === "" ? "-" : r.nilai)}</b></div>
+          <div>
+            <div class="grade-name">${esc(r.subject)}</div>
+          </div>
+          <div><span class="pill pred-${r.pred}">${esc(r.pred)}</span></div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderTeacherGrades(){
+  const subject = getSelectedSubject();
+  ensureGradeSubject(subject);
+  const query = document.getElementById("gradeSearch")?.value || "";
+  const cls = document.getElementById("gradeClass")?.value || "all";
+  const data = filteredStudents(query, cls);
+  const rows = rowsForGrades(subject).filter(r => cls === "all" || r.className === cls)
+    .filter(r => !query || r.name.toLowerCase().includes(query.toLowerCase()) || String(r.nis).includes(query));
+
+  return `
+    <div class="section">
+      <div>
+        <h2>Nilai Siswa</h2>
+        <p class="muted">Rekap minimalis: nilai tampil di samping nama siswa, dengan jarak angka nilai ditambah 3 spasi agar share WA tetap rapi.</p>
+      </div>
+    </div>
+
+    ${gradeStatsHtml(subject)}
+
+    <div class="card no-print">
+      <div class="grade-tools">
+        <label>Mata pelajaran</label>
+        <select id="gradeSubject" onchange="renderGrades()">
+          ${state.gradeSubjects.map(s => `<option value="${esc(s)}" ${s === subject ? "selected" : ""}>${esc(s)}</option>`).join("")}
+        </select>
+
+        <div class="actions">
+          <input id="newSubjectName" placeholder="Tambah mapel baru, contoh: Hadits">
+          <button class="btn primary" onclick="addGradeSubject()">Tambah Mata Pelajaran</button>
+        </div>
+
+        <div class="filter">
+          <select id="gradeClass" onchange="renderGrades()">
+            <option value="all">Semua kelas</option>
+            ${classes().map(k => `<option value="${esc(k)}" ${cls === k ? "selected" : ""}>${esc(k)}</option>`).join("")}
+          </select>
+          <input id="gradeSearch" placeholder="Cari NIS atau nama..." value="${esc(query)}" oninput="renderGrades()">
+          <button class="btn red" onclick="deleteGradeSubject()">Hapus Mata Pelajaran</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h3>Input Nilai</h3>
+      <p class="muted">Isi nilai 0–100. Kolom nilai berada di samping nama agar lebih hemat tempat.</p>
+      <div class="student-list">
+        ${data.length ? data.map(s => {
+          const nilai = getGradeValue(subject, s.id);
+          const pred = predikatNilai(nilai);
+          return `
+            <div class="student-item grade-compact-card">
+              <div class="grade-input-compact">
+                <div class="grade-card-title">
+                  <div class="student-name">${esc(s.name)}</div>
+                  <div class="student-nis">NIS ${esc(s.nis)} • ${esc(s.className)} • <span class="pill pred-${pred}">${esc(predikatText(nilai))}</span></div>
+                </div>
+                <div>
+                  <label class="grade-mini-label">Nilai</label>
+                  <input id="grade-score-${esc(s.id)}" class="grade-input" type="number" min="0" max="100" data-subject="${esc(subject)}" data-id="${esc(s.id)}" value="${esc(nilai)}" placeholder="0-100" onchange="setGradeFromInput(this)">
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("") : `<div class="empty">Data siswa tidak ditemukan.</div>`}
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <div class="actions">
+        <button class="btn white" onclick="copyGradeText()">Copy Rekap Nilai</button>
+        <button class="btn white" onclick="shareGradeWhatsApp()">Share WA</button>
+        <button class="btn white" onclick="exportGradesCSV()">CSV</button>
+        <button class="btn white" onclick="downloadJPG('nilaiArea')">JPG</button>
+      </div>
+    </div>
+
+    <div id="nilaiArea" class="report-box">
+      <div class="report-head">
+        <h3>${esc(state.schoolName)}</h3>
+        <p class="muted" style="margin:0">Rekap Nilai Minimal • ${esc(subject)} • ${prettyDate(today())}</p>
+      </div>
+
+      <div class="grade-report-row head">
+        <div>NIS</div>
+        <div>Nama / Nilai</div>
+      </div>
+
+      ${rows.length ? rows.map(r => `
+        <div class="grade-report-row">
+          <div>${esc(r.nis)}</div>
+          <div class="grade-name-score">
+            <span class="grade-name">${esc(r.name)}</span>
+            <b class="grade-score-pill">${esc(r.nilai === "" ? "-" : r.nilai)}</b>
+          </div>
+        </div>
+      `).join("") : `<div class="empty">Data siswa tidak ditemukan.</div>`}
+    </div>
+
+    <div class="card no-print" style="margin-top:12px">
+      <h3>Preview teks share nilai rapi WA</h3>
+      <div class="share-preview">${esc(gradeShareText(subject))}</div>
+    </div>
+  `;
+}
+function renderGrades(){
+  if(currentUser.role === "siswa"){
+    const student = findCurrentStudent();
+    document.getElementById("mainContent").innerHTML = student
+      ? renderStudentGrades(student)
+      : `<div class="card empty">Nama login belum cocok dengan data siswa, jadi nilai belum bisa ditampilkan.</div>`;
+    return;
+  }
+
+  document.getElementById("mainContent").innerHTML = renderTeacherGrades();
+}
+
+
+
+function currentMonthValue(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+
+function monthLabel(month){
+  const value = String(month || currentMonthValue()).slice(0,7);
+  const [y,m] = value.split("-");
+  if(!y || !m) return value;
+  return new Date(`${y}-${m}-01T00:00:00`).toLocaleDateString("id-ID", {month:"long", year:"numeric"});
+}
+
+function ensureFees(){
+  if(!state.fees || typeof state.fees !== "object") state.fees = {};
+}
+
+function ensureFeeMonth(month){
+  ensureFees();
+  const key = String(month || currentMonthValue()).slice(0,7);
+  if(!state.fees[key]) state.fees[key] = {};
+  return key;
+}
+
+function getFeeRecord(month, studentId){
+  const key = String(month || currentMonthValue()).slice(0,7);
+  return state.fees?.[key]?.[studentId] || {};
+}
+
+function getFeeAmount(month, studentId){
+  const r = getFeeRecord(month, studentId);
+  if(r.amount === 0 || r.amount) return String(r.amount);
+  return "";
+}
+
+function getFeeStatus(month, studentId){
+  return getFeeRecord(month, studentId).status === "Lunas" ? "Lunas" : "Belum";
+}
+
+function formatRupiah(value){
+  const n = Number(value || 0);
+  if(!Number.isFinite(n) || n <= 0) return "-";
+  return "Rp " + new Intl.NumberFormat("id-ID").format(n);
+}
+
+function setFeeData(month, studentId, amount, status, source="manual"){
+  const key = ensureFeeMonth(month);
+  const rawAmount = String(amount ?? "").trim().replace(/\./g, "").replace(/,/g, ".");
+  const n = rawAmount === "" ? 0 : Number(rawAmount);
+  if(!Number.isFinite(n) || n < 0){
+    alert("Nominal iuran harus angka 0 atau lebih.");
+    return false;
+  }
+  const finalStatus = status === "Lunas" ? "Lunas" : "Belum";
+  state.fees[key][studentId] = {
+    amount:n,
+    status:finalStatus,
+    paidAt:finalStatus === "Lunas" ? new Date().toISOString() : "",
+    by:currentUser?.name || "Sistem",
+    source,
+    updatedAt:new Date().toISOString()
+  };
+  saveState();
+  return true;
+}
+
+function saveStudentFee(studentId){
+  const month = document.getElementById("studentFeeMonth")?.value || currentMonthValue();
+  const amount = document.getElementById("studentFeeAmount")?.value || "";
+  const status = document.querySelector('input[name="studentFeeStatus"]:checked')?.value || getFeeStatus(month, studentId);
+  if(setFeeData(month, studentId, amount, status, "siswa")){
+    alert("Data iuran berhasil disimpan.");
+    renderStudent();
+  }
+}
+
+function quickSetStudentFee(studentId,status){
+  const month = document.getElementById("studentFeeMonth")?.value || currentMonthValue();
+  const amount = document.getElementById("studentFeeAmount")?.value || getFeeAmount(month, studentId) || DEFAULT_IURAN_AMOUNT;
+  if(setFeeData(month, studentId, amount, status, "siswa")) renderStudent();
+}
+
+function renderStudentFeeCard(student){
+  const month = document.getElementById("studentFeeMonth")?.value || currentMonthValue();
+  const amount = getFeeAmount(month, student.id);
+  const status = getFeeStatus(month, student.id);
+  return `
+    <div class="card no-print">
+      <h3>💰 Iuran Bulanan</h3>
+      <p class="muted">Simpan informasi pembayaran iuran dari login siswa. Admin dapat melihat rekap lengkapnya.</p>
+      <label>Bulan iuran</label>
+      <input id="studentFeeMonth" type="month" value="${esc(month)}" onchange="renderStudent()">
+      <label>Nominal iuran</label>
+      <input id="studentFeeAmount" type="number" min="0" inputmode="numeric" placeholder="Contoh: 10000" value="${esc(amount)}">
+      <label>Status pembayaran</label>
+      <div class="fee-status-mini" style="grid-template-columns:1fr 1fr">
+        <label class="fee-status-btn ${status === "Lunas" ? "active lunas" : ""}" style="display:flex;align-items:center;justify-content:center;margin:0">
+          <input type="radio" name="studentFeeStatus" value="Lunas" ${status === "Lunas" ? "checked" : ""} style="display:none">✅ Lunas
+        </label>
+        <label class="fee-status-btn ${status !== "Lunas" ? "active belum" : ""}" style="display:flex;align-items:center;justify-content:center;margin:0">
+          <input type="radio" name="studentFeeStatus" value="Belum" ${status !== "Lunas" ? "checked" : ""} style="display:none">⏳ Belum
+        </label>
+      </div>
+      <div class="actions" style="margin-top:12px">
+        <button class="btn green" onclick="saveStudentFee('${esc(student.id)}')">Simpan Iuran</button>
+        <button class="btn white" onclick="quickSetStudentFee('${esc(student.id)}','Lunas')">Tandai Lunas</button>
+      </div>
+      <p class="fee-card-note">Status bulan ${esc(monthLabel(month))}: <b>${esc(status)}</b> • Nominal: <b>${esc(formatRupiah(amount))}</b></p>
+    </div>
+  `;
+}
+
+function feeRows(month, className="all"){
+  return filteredStudents("", className).map(s => {
+    const r = getFeeRecord(month, s.id);
+    const amount = r.amount === 0 || r.amount ? Number(r.amount) : 0;
+    const status = r.status === "Lunas" ? "Lunas" : "Belum";
+    return {id:s.id, nis:s.nis, name:s.name, className:s.className, amount, status, updatedAt:r.updatedAt || ""};
+  });
+}
+
+function feeStats(month, className="all"){
+  const rows = feeRows(month, className);
+  const total = rows.length;
+  const lunas = rows.filter(r => r.status === "Lunas").length;
+  const belum = total - lunas;
+  const amount = rows.filter(r => r.status === "Lunas").reduce((sum,r) => sum + Number(r.amount || 0), 0);
+  return {total,lunas,belum,amount};
+}
+
+function feeStatsHtml(month, className="all"){
+  const s = feeStats(month, className);
+  return `<div class="fee-summary-grid">
+    <div class="fee-summary-card"><b>${s.total}</b><span>Siswa</span></div>
+    <div class="fee-summary-card"><b>${s.lunas}</b><span>Lunas</span></div>
+    <div class="fee-summary-card"><b>${s.belum}</b><span>Belum</span></div>
+    <div class="fee-summary-card"><b>${esc(formatRupiah(s.amount).replace("Rp ",""))}</b><span>Terkumpul</span></div>
+  </div>`;
+}
+
+function setFeeFromAdmin(studentId){
+  const month = document.getElementById("feeMonth")?.value || currentMonthValue();
+  const amount = document.getElementById(`fee-amount-${studentId}`)?.value || "";
+  const status = getFeeStatus(month, studentId);
+  if(setFeeData(month, studentId, amount, status, "admin")) renderFees();
+}
+
+function setFeeStatusAdmin(studentId,status){
+  const month = document.getElementById("feeMonth")?.value || currentMonthValue();
+  const amount = document.getElementById(`fee-amount-${studentId}`)?.value || getFeeAmount(month, studentId) || DEFAULT_IURAN_AMOUNT;
+  if(setFeeData(month, studentId, amount, status, "admin")) renderFees();
+}
+
+function markAllFees(status){
+  const month = document.getElementById("feeMonth")?.value || currentMonthValue();
+  const cls = document.getElementById("feeClass")?.value || "all";
+  if(!confirm(`Tandai semua siswa ${cls === "all" ? "semua kelas" : cls} menjadi ${status}?`)) return;
+  feeRows(month, cls).forEach(r => {
+    const amount = getFeeAmount(month, r.id) || DEFAULT_IURAN_AMOUNT;
+    setFeeData(month, r.id, amount, status, "admin-bulk");
+  });
+  renderFees();
+}
+
+function feeShareText(month, className="all"){
+  const rows = feeRows(month, className);
+  const s = feeStats(month, className);
+  const compact = rows.map(r => ({
+    nis:String(r.nis || "").slice(-6),
+    name:shortNameForShare(r.name, 10),
+    status:r.status === "Lunas" ? "L" : "B",
+    amount:r.amount ? new Intl.NumberFormat("id-ID").format(r.amount) : "-"
+  }));
+  const nisWidth = 6;
+  const nameWidth = 10;
+  const statusWidth = 1;
+  const amountWidth = Math.max(5, ...compact.map(r => visibleTextLength(r.amount)));
+  const rowsText = compact.map(r => `${padRightText(r.nis, nisWidth)} ${padRightText(r.name, nameWidth)}  ${padRightText(r.status, statusWidth)}  ${padRightText(r.amount, amountWidth)}`).join("\n");
+  const table = `${padRightText("NIS", nisWidth)} ${padRightText("Nama", nameWidth)}  ${padRightText("K", statusWidth)}  ${padRightText("Iuran", amountWidth)}\n${"-".repeat(nisWidth)} ${"-".repeat(nameWidth)}  ${"-".repeat(statusWidth)}  ${"-".repeat(amountWidth)}\n${rowsText}`;
+  const fence = "```";
+  return `REKAP IURAN SISWA\n${state.schoolName}\nBulan: ${monthLabel(month)}\nKelas: ${className === "all" ? "Semua Kelas" : className}\n\nTotal Siswa : ${s.total}\nLunas       : ${s.lunas}\nBelum       : ${s.belum}\nTerkumpul   : ${formatRupiah(s.amount)}\n\nKeterangan: L=Lunas, B=Belum\n\n${fence}\n${table}\n${fence}`;
+}
+
+function copyFeeText(){
+  const month = document.getElementById("feeMonth")?.value || currentMonthValue();
+  const cls = document.getElementById("feeClass")?.value || "all";
+  navigator.clipboard.writeText(feeShareText(month, cls));
+  alert("Rekap iuran berhasil disalin.");
+}
+
+function shareFeeWhatsApp(){
+  const month = document.getElementById("feeMonth")?.value || currentMonthValue();
+  const cls = document.getElementById("feeClass")?.value || "all";
+  window.open(`https://wa.me/?text=${encodeURIComponent(feeShareText(month, cls))}`, "_blank");
+}
+
+function exportFeesCSV(){
+  const month = document.getElementById("feeMonth")?.value || currentMonthValue();
+  const cls = document.getElementById("feeClass")?.value || "all";
+  const rows = feeRows(month, cls);
+  const csvRows = [
+    ["Bulan","NIS","Nama","Kelas","Status","Nominal"].join(","),
+    ...rows.map(r => [month, r.nis, r.name, r.className, r.status, r.amount].map(x => `"${String(x).replaceAll('"','""')}"`).join(","))
+  ];
+  downloadFile(`rekap-iuran-${month}.csv`, csvRows.join("\n"), "text/csv;charset=utf-8");
+}
+
+function adminFeeDashboardCard(){
+  if(currentUser?.role !== "admin") return "";
+  const month = currentMonthValue();
+  const s = feeStats(month, "all");
+  return `
+    <div class="card">
+      <h3>💰 Iuran Bulanan</h3>
+      <p class="muted">Bulan ${esc(monthLabel(month))}: <b>${s.lunas}</b> lunas, <b>${s.belum}</b> belum. Terkumpul <b>${esc(formatRupiah(s.amount))}</b>.</p>
+      <button class="btn primary full no-print" onclick="activePage='iuran';render()">Lihat Rekap Iuran</button>
+    </div>
+  `;
+}
+
+function renderFees(){
+  if(currentUser.role === "siswa"){
+    const student = findCurrentStudent();
+    document.getElementById("mainContent").innerHTML = `
+      <div class="section"><div><h2>Iuran Saya</h2><p class="muted">Simpan pembayaran iuran bulanan tanpa login ulang.</p></div></div>
+      ${student ? renderStudentSwitchCard(student) + renderStudentFeeCard(student) : renderStudentPickerCard()}
+    `;
+    return;
+  }
+  if(currentUser.role !== "admin"){
+    activePage = "dashboard";
+    return renderDashboard();
+  }
+
+  const month = document.getElementById("feeMonth")?.value || currentMonthValue();
+  const cls = document.getElementById("feeClass")?.value || "all";
+  const query = document.getElementById("feeSearch")?.value || "";
+  const rows = feeRows(month, cls).filter(r => !query || r.name.toLowerCase().includes(query.toLowerCase()) || String(r.nis).includes(query));
+
+  document.getElementById("mainContent").innerHTML = `
+    <div class="section">
+      <div>
+        <h2>💰 Rekap Iuran</h2>
+        <p class="muted">Khusus Admin untuk melihat dan membagikan informasi pembayaran siswa tiap bulan.</p>
+      </div>
+    </div>
+
+    ${feeStatsHtml(month, cls)}
+
+    <div class="card no-print">
+      <div class="filter">
+        <input id="feeMonth" type="month" value="${esc(month)}" onchange="renderFees()">
+        <select id="feeClass" onchange="renderFees()">
+          <option value="all">Semua kelas</option>
+          ${classes().map(k => `<option value="${esc(k)}" ${cls === k ? "selected" : ""}>${esc(k)}</option>`).join("")}
+        </select>
+        <input id="feeSearch" placeholder="Cari NIS atau nama..." value="${esc(query)}" oninput="renderFees()">
+      </div>
+      <div class="actions" style="margin-top:12px">
+        <button class="btn white" onclick="copyFeeText()">Copy Rekap</button>
+        <button class="btn green" onclick="shareFeeWhatsApp()">Share WA</button>
+        <button class="btn white" onclick="exportFeesCSV()">CSV</button>
+        <button class="btn white" onclick="downloadJPG('feeArea')">JPG</button>
+      </div>
+      <div class="actions" style="margin-top:9px">
+        <button class="btn white" onclick="markAllFees('Belum')">Semua Belum</button>
+        <button class="btn green" onclick="markAllFees('Lunas')">Semua Lunas</button>
+      </div>
+    </div>
+
+    <div id="feeArea" class="card">
+      <h3>Rekap Iuran • ${esc(monthLabel(month))}</h3>
+      <p class="muted" style="margin-bottom:10px">${esc(cls === "all" ? "Semua Kelas" : cls)}</p>
+      <div class="fee-admin-row head">
+        <div>Siswa</div><div>Nominal</div><div>Status</div>
+      </div>
+      <div class="student-list" style="gap:7px">
+        ${rows.length ? rows.map(r => {
+          const amount = getFeeAmount(month, r.id);
+          const status = getFeeStatus(month, r.id);
+          return `
+            <div class="student-item" style="padding:9px 10px">
+              <div class="fee-admin-row">
+                <div style="min-width:0">
+                  <div class="student-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.name)}</div>
+                  <div class="student-nis">${esc(r.nis)} • ${esc(r.className)}</div>
+                </div>
+                <input id="fee-amount-${esc(r.id)}" class="fee-amount-input" type="number" min="0" value="${esc(amount)}" placeholder="0" onchange="setFeeFromAdmin('${esc(r.id)}')">
+                <div class="fee-status-mini">
+                  <button class="fee-status-btn ${status === "Lunas" ? "active lunas" : ""}" onclick="setFeeStatusAdmin('${esc(r.id)}','Lunas')">L</button>
+                  <button class="fee-status-btn ${status !== "Lunas" ? "active belum" : ""}" onclick="setFeeStatusAdmin('${esc(r.id)}','Belum')">B</button>
+                </div>
+              </div>
+            </div>`;
+        }).join("") : `<div class="empty">Data iuran tidak ditemukan.</div>`}
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h3>Preview Share WA</h3>
+      <div class="share-preview">${esc(feeShareText(month, cls))}</div>
+    </div>
+  `;
+}
+
+function renderBackup(){
+  const cloudUrl = getCloudApiUrl();
+  document.getElementById("mainContent").innerHTML = `
+    <div class="section">
+      <div>
+        <h2>Data & Pencadangan</h2>
+        <p class="muted">Data tersimpan otomatis di storage pribadi browser dalam 1 backup utama berisi rekapan maksimal 30 hari, dan bisa dikirim ke Cloudflare jika URL Worker sudah aktif.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Storage Pribadi Otomatis 30 Hari</h3>
+      <p class="muted">Setiap tambah/hapus siswa, absen, input nilai, input iuran, atau ubah mata pelajaran, aplikasi otomatis menimpa 1 backup utama. Di dalam backup itu tersimpan snapshot harian maksimal 30 hari terakhir, bukan membuat banyak file backup terpisah.</p>
+      ${privateBackupInfoHtml()}
+      <div class="actions" style="margin-top:12px">
+        <button class="btn primary" onclick="manualSavePrivateStorage()">Timpa Backup Utama</button>
+        <button class="btn green" onclick="restorePrivateStorageBackup()">Pulihkan Terakhir</button>
+        <button class="btn white" onclick="downloadManualBackup()">Download JSON</button>
+        <button class="btn red" onclick="clearPrivateStorageBackup()">Hapus Cadangan</button>
+      </div>
+    </div>
+
+    ${adminResetPanelHtml()}
+
+    <div class="card">
+      <h3>Cloudflare Online</h3>
+      <p class="muted">Masukkan URL Worker Cloudflare. Setelah tersambung, perubahan absensi, nilai, dan iuran akan otomatis ikut tersimpan online.</p>
+      <label>URL Worker Cloudflare</label>
+      <input id="cloudApiInput" placeholder="https://absenku-api.namaanda.workers.dev" value="${esc(cloudUrl)}">
+      <p id="cloudStatusText" class="muted" style="margin-top:10px">${esc(cloudStatusText())}</p>
+      <div class="actions" style="margin-top:12px">
+        <button class="btn primary" onclick="setCloudApiUrl()">Simpan URL</button>
+        <button class="btn white" onclick="syncFromCloud(true)">Ambil Data Cloud</button>
+        <button class="btn green" onclick="saveToCloud(true)">Upload Data Sekarang</button>
+        <button class="btn red" onclick="clearCloudApiUrl()">Hapus URL</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Import Backup</h3>
+      <p class="muted">Import bisa dari file JSON atau dari teks JSON. Setelah import berhasil, data otomatis masuk ke 1 backup utama storage pribadi.</p>
+      <label>Pilih file backup JSON</label>
+      <input type="file" accept="application/json,.json" onchange="importBackupFromFile(event)">
+      <label>Atau tempel JSON backup</label>
+      <textarea id="importBox" placeholder="Tempel data JSON backup di sini..."></textarea>
+      <button class="btn green full" style="margin-top:10px" onclick="importBackupFromText()">Import dari Teks</button>
+    </div>
+
+    <div class="card">
+      <h3>Catatan penting</h3>
+      <p class="muted">Storage pribadi tersimpan di browser/perangkat yang sama. Sistem sekarang memakai 1 backup utama yang ditimpa otomatis dan menyimpan rekapan maksimal 30 hari. Kalau browser dibersihkan, data lokal bisa hilang. Untuk dipakai bersama semua HP, tetap aktifkan Cloudflare dan tekan Upload Data Sekarang satu kali setelah data awal lengkap.</p>
+    </div>
+  `;
+}
+
+// Kompatibilitas untuk tombol import lama jika masih tersimpan di cache browser.
+function importBackup(){
+  importBackupFromText();
+}
+
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>
